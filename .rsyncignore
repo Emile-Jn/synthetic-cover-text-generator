@@ -1,0 +1,11 @@
+.venv/
+.uv/
+.git/
+__pycache__/
+*.log
+
+# MacOS specific files
+.DS_Store
+
+# Jetbrains IDE files
+.idea/

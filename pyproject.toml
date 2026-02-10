@@ -1,0 +1,14 @@
+[project]
+name = "synthetic-cover-text-generator"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "accelerate>=1.12.0",
+    "datasets>=3.6.0",
+    "peft>=0.18.1",
+    "torch>=2.10.0",
+    "transformers>=5.1.0",
+    "trl>=0.28.0",
+    "unsloth>=2025.9.5",
+]
