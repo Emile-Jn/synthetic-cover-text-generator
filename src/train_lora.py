@@ -3,6 +3,7 @@ import torch
 from datasets import Dataset
 from trl import SFTTrainer, SFTConfig
 from pyprojroot import here
+import wandb
 
 def load_text_lines(file_path, n=None):
     with open(file_path, "r", encoding="utf-8") as f:
@@ -12,6 +13,21 @@ def load_text_lines(file_path, n=None):
     return Dataset.from_dict({"text": lines})
 
 def main():
+    # Initialize wandb
+    wandb.init(
+        project="entropy-steering-steganography",
+        config={
+            "model_name": "unsloth/Qwen3-8B",
+            "max_seq_length": 512,
+            "lora_r": 64,
+            "lora_alpha": 64,
+            "learning_rate": 2e-4,
+            "num_epochs": 2,
+            "batch_size": 8,
+            "gradient_accumulation_steps": 4,
+        }
+    )
+
     # 1. Configuration
     model_name = "unsloth/Qwen3-8B" # Base model
     max_seq_length = 512            # IMDb reviews are usually within this limit
@@ -37,7 +53,7 @@ def main():
     )
 
     # 4. Load your data
-    dataset = load_text_lines(here("data/imdb_reviews.txt"), n=5)
+    dataset = load_text_lines(here("data/imdb_reviews.txt"))
 
     # 5. Set up Trainer
     trainer = SFTTrainer(
@@ -62,6 +78,8 @@ def main():
             lr_scheduler_type = "linear",
             seed = 3407,
             output_dir = "outputs",
+            report_to = "wandb",  # Enable wandb logging
+            logging_dir = "outputs/logs",  # Directory for logs
         ),
     )
 
@@ -69,6 +87,9 @@ def main():
     trainer.train()
     model.save_pretrained_merged("imdb_qwen3_mimic", tokenizer, save_method = "lora")
     print("Training complete. Adapter saved to 'imdb_qwen3_mimic'")
+
+    # Finish wandb run
+    wandb.finish()
 
 if __name__ == "__main__":
     main()

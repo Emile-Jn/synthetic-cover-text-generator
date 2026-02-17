@@ -13,4 +13,5 @@ dependencies = [
     "trl<0.14.0",
     "unsloth>=2025.10.8",
     "unsloth-zoo>=2025.10.9",
+    "wandb>=0.25.0",
 ]
