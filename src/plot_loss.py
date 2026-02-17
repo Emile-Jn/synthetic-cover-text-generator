@@ -15,7 +15,7 @@ import statistics
 import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[1]
-TEST_JSON = ROOT / "test.json"
+TEST_JSON = ROOT / "data" / "first_run_log.json"
 OUT_DIR = ROOT / "plots"
 OUT_DIR.mkdir(exist_ok=True)
 OUT_PNG = OUT_DIR / "loss_vs_epoch.png"
