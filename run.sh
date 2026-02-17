@@ -21,3 +21,4 @@ echo "Finished."
 
 # Example usage:
 # sbatch run.sh hello_world.py
+# sbatch --partition=a100 run.sh -m src.vibe_check.py ""

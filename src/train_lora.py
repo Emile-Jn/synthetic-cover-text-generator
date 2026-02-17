@@ -85,8 +85,12 @@ def main():
 
     # 6. Train and Save
     trainer.train()
-    model.save_pretrained_merged("imdb_qwen3_mimic", tokenizer, save_method = "lora")
-    print("Training complete. Adapter saved to 'imdb_qwen3_mimic'")
+    model.save_pretrained_merged(
+        "imdb_qwen3_mimic",
+        tokenizer,
+        save_method = "merged_16bit",  # save fully merged weights for direct loading
+    )
+    print("Training complete. Merged model saved to 'imdb_qwen3_mimic'")
 
     # Finish wandb run
     wandb.finish()
