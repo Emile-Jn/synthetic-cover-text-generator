@@ -1,5 +1,9 @@
 import argparse
 from typing import List
+from pathlib import Path
+import re
+from datetime import datetime
+from typing import Optional
 
 import torch
 from pyprojroot import here
@@ -34,10 +38,36 @@ def resolve_prompt_text(prompt: str, tokenizer) -> str:
 
 def latest_model_path():
     """
-    Get the path of the latest saved fine-tuned model
+    Get the path of the latest saved fine-tuned model in the outputs/ directory, based
+    on the timestamp in the folder name. Folder names are formatted like 20260219_1137_quiet-grass-3
     Returns:
-
+        Path to the latest model directory, or None if no valid directories are found.
     """
+    root = Path(here())
+    outputs_dir = root / "outputs"
+    if not outputs_dir.exists() or not outputs_dir.is_dir():
+        return None
+
+    time_prefix_re = re.compile(r"^(\d{8}_\d{4})")
+    latest_dir: Optional[Path] = None
+    latest_dt: Optional[datetime] = None
+
+    for entry in outputs_dir.iterdir():
+        if not entry.is_dir():
+            continue
+        m = time_prefix_re.match(entry.name)
+        if not m:
+            continue
+        prefix = m.group(1)
+        try:
+            dt = datetime.strptime(prefix, "%Y%m%d_%H%M")
+        except ValueError:
+            continue
+        if latest_dt is None or dt > latest_dt:
+            latest_dt = dt
+            latest_dir = entry
+
+    return str(latest_dir) if latest_dir is not None else None
 
 
 def generate_samples(
@@ -126,8 +156,18 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+    # If no model dir is provided, try to find the latest saved model under outputs/
+    model_dir = args.model_dir
+    if not model_dir:
+        model_dir = latest_model_path()
+        if not model_dir:
+            raise FileNotFoundError(
+                "No model directory provided and no timestamped directories found under outputs/."
+            )
+        print(f"Using latest model directory: {model_dir}")
+
     model, tokenizer = load_model(
-        model_dir=args.model_dir,
+        model_dir=model_dir,
         max_seq_length=args.max_seq_length,
         load_in_4bit=args.load_in_4bit,
     )
