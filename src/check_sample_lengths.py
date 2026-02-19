@@ -63,7 +63,7 @@ def main():
     stats_dict_original = analysis(word_counts_original)
     print("Stats of the original dataset: \n")
     pretty_print(stats_dict_original)
-    word_counts_synthetic = count_lengths(["generated_samples/samples.txt", "generated_samples/samples_1.txt"])
+    word_counts_synthetic = count_lengths(["generated_samples/samples_2.txt"])
     stats_dict_synthetic = analysis(word_counts_synthetic)
     print("\nStats of the synthetic dataset: \n")
     pretty_print(stats_dict_synthetic)
