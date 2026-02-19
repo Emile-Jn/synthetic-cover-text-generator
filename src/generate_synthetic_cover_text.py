@@ -3,7 +3,7 @@ Script to generate text samples from the fine-tuned Qwen3 model using unsloth.Fa
 The purpose here is to create a dataset in the same format as the data the model was fine-tuned on.
 
 Run this on the slurm cluster with a command like:
-sbatch --partition=GPU-a100s run.sh -m src.vibe_check --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 200
+sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 200
 """
 
 import argparse
@@ -202,7 +202,13 @@ def main():
     # Save samples to files in the same format as the training data (one sample per line, no special tokens)
     output_dir = Path(here()) / "generated_samples"
     output_dir.mkdir(exist_ok=True)
-    output_file = output_dir / "samples.txt"
+    existing = [
+        int(m.group(1))
+        for p in output_dir.iterdir()
+        if (m := re.fullmatch(r"samples_(\d+)\.txt", p.name))
+    ]
+    next_n = max(existing, default=0) + 1
+    output_file = output_dir / f"samples_{next_n}.txt"
     total_generated = 0
     buffer: List[str] = []
     t_start = time.perf_counter()

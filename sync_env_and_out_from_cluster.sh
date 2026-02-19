@@ -15,10 +15,12 @@ REMOTE_BASE="synthetic-cover-text-generator"
 # Ensure local slurm_output directory exists
 mkdir -p "$LOCAL_BASE/slurm_output"
 
-# Sync config files to repo root (pyproject.toml, uv.lock)
+# Sync config files to repo root (pyproject.toml, uv.lock) and generated_samples
 rsync -avP -e ssh \
   --include='pyproject.toml' \
   --include='uv.lock' \
+  --include='generated_samples' \
+  --include='generated_samples/**' \
   --exclude='*' \
   "$REMOTE:$REMOTE_BASE/" \
   "$LOCAL_BASE/"
