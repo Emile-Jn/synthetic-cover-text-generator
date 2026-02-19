@@ -1,3 +1,11 @@
+"""
+Script to generate text samples from the fine-tuned Qwen3 model using unsloth.FastLanguageModel.
+The purpose here is to check if the model output makes sense relative to the task it was fine-tuned on.
+
+Run this on the slurm cluster with a command like:
+sbatch --partition=GPU-a100s run.sh -m src.vibe_check --prompt ""
+"""
+
 import argparse
 from typing import List
 from pathlib import Path

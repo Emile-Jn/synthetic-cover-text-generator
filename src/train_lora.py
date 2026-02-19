@@ -122,13 +122,13 @@ def fine_tune():
 
     # 6. Train and Save
     trainer.train()
+    final_model_path = os.path.join(output_dir, "final_merged_model")
     model.save_pretrained_merged(
-        "imdb_qwen3_mimic",
+        final_model_path,
         tokenizer,
-        save_method = "merged_16bit",  # save fully merged weights for direct loading
+        save_method="merged_16bit",
     )
-    print("Training complete. Merged model saved to 'imdb_qwen3_mimic'")
-
+    print(f"Model saved to {final_model_path}")
     # Finish wandb run
     wandb.finish()
 
