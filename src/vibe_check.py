@@ -21,8 +21,13 @@ def resolve_prompt_text(prompt: str, tokenizer) -> str:
     """Return BOS token text when prompt is empty."""
     if prompt.strip():
         return prompt
+    # Try to get BOS token from tokenizer (Doesn't exist for Qwen models sadly)
     if tokenizer.bos_token:
         return tokenizer.bos_token
+    # Fallback to EOS (acceptable solution for Qwen, since empty string causes a shape error)
+    if tokenizer.eos_token:
+        print("Using EOS token as prompt.")
+        return tokenizer.eos_token
     if tokenizer.bos_token_id is not None:
         return tokenizer.decode([tokenizer.bos_token_id])
     raise ValueError("Tokenizer is missing a BOS token; provide a prompt instead.")
@@ -39,6 +44,7 @@ def generate_samples(
 ) -> List[str]:
     """Generate multiple continuations for a single prompt."""
     prompt_text = resolve_prompt_text(prompt, tokenizer)
+    # prompt_text = prompt # try empty string as prompt, see if it works without BOS token
     model_inputs = tokenizer([prompt_text], return_tensors="pt").to(model.device)
     with torch.inference_mode():
         generated = model.generate(

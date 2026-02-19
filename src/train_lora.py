@@ -1,20 +1,47 @@
+"""
+Fine-tune Qwen3-8B on IMDb reviews (or another text dataset) using LoRA adapters for style mimicry.
+The goal is for the model to accurately match the statistical distribution of the corpus,
+so that it can generate samples that are impossible to distinguish from the original data,
+even with a powerful steganalysis model.
+
+Run this file on the slurm cluster:
+sbatch --partition=GPU-a100s run.sh -m src.train_lora
+"""
+
 import unsloth # Has to be imported before transformers to avoid import conflicts
 import torch
 from datasets import Dataset
 from trl import SFTTrainer, SFTConfig
 from pyprojroot import here
 import wandb
+import datetime
+import os
 
-def load_text_lines(file_path, n=None):
+def load_text_lines(file_path, eos_token, n=None):
+    """
+    Make a Hugging Face Dataset from a text file where each line is a separate example.
+    Optionally inject an EOS token at the start and end of each line.
+    Args:
+        file_path: Path to the text file.
+        eos_token: Token to inject at the start and end of each line (if not None).
+        n: Optional limit on the number of lines to read (for quick testing).
+
+    Returns:
+        a Hugging Face Dataset with a single "text" column containing the processed lines.
+    """
     with open(file_path, "r", encoding="utf-8") as f:
-        lines = [line.strip() for line in f if line.strip()]
+        if eos_token is not None:
+            # Inject the anchor tokens directly into the raw string
+            lines = [f"{eos_token}{line.strip()}{eos_token}" for line in f if line.strip()]
+        else:
+            lines = [line.strip() for line in f if line.strip()]
         if n is not None:
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
 
-def main():
+def fine_tune():
     # Initialize wandb
-    wandb.init(
+    run = wandb.init(
         project="entropy-steering-steganography",
         config={
             "model_name": "unsloth/Qwen3-8B",
@@ -27,6 +54,12 @@ def main():
             "gradient_accumulation_steps": 4,
         }
     )
+
+    # 0. Define a unique output path
+    # Example: outputs/20260219_1155_sunny-wizard-42
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    run_name = run.name if run.name else "run"
+    output_dir = os.path.join("outputs", f"{timestamp}_{run_name}")
 
     # 1. Configuration
     model_name = "unsloth/Qwen3-8B" # Base model
@@ -53,7 +86,7 @@ def main():
     )
 
     # 4. Load your data
-    dataset = load_text_lines(here("data/imdb_reviews.txt"))
+    dataset = load_text_lines(here("data/imdb_reviews.txt"), tokenizer.eos_token)
 
     # 5. Set up Trainer
     trainer = SFTTrainer(
@@ -77,9 +110,9 @@ def main():
             weight_decay = 0.01,
             lr_scheduler_type = "linear",
             seed = 3407,
-            output_dir = "outputs",
-            report_to = "wandb",  # Enable wandb logging
-            logging_dir = "outputs/logs",  # Directory for logs
+            output_dir=output_dir,  # Use the dynamic path
+            logging_dir=os.path.join(output_dir, "logs"), # Directory for logs
+            report_to = "wandb"  # Enable wandb logging
         ),
     )
 
@@ -96,4 +129,4 @@ def main():
     wandb.finish()
 
 if __name__ == "__main__":
-    main()
+    fine_tune()
