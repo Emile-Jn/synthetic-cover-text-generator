@@ -3,28 +3,39 @@ Script to generate text samples from the fine-tuned Qwen3 model using unsloth.Fa
 The purpose here is to create a dataset in the same format as the data the model was fine-tuned on.
 
 Run this on the slurm cluster with a command like:
-sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 200
+sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 200 --batch-size 16
 """
 
 import argparse
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
+from typing import Iterator, List, Optional
 import re
 
 import torch
 from pyprojroot import here
 import unsloth
 
+
 def load_model(model_dir: str, max_seq_length: int = 512, load_in_4bit: bool = False):
     """Load the merged LoRA model produced by train_lora.py."""
+    # A100 has native BF16 support – faster than FP16 and no loss scaling needed.
+    dtype = torch.bfloat16
     model, tokenizer = unsloth.FastLanguageModel.from_pretrained(
         model_name=model_dir,
         max_seq_length=max_seq_length,
         load_in_4bit=load_in_4bit,
+        dtype=dtype,
     )
     unsloth.FastLanguageModel.for_inference(model)
+
+    # Ensure a pad token exists so batched generation doesn't warn / fall back to slow paths.
+    # Use EOS as pad (common convention for decoder-only models).
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.pad_token_id = tokenizer.eos_token_id
+
     return model, tokenizer
 
 
@@ -85,31 +96,52 @@ def generate_samples(
     max_new_tokens: int,
     temperature: float,
     top_p: float,
-):
+    batch_size: int = 8,
+) -> Iterator[str]:
     """
-    Generate continuations for a single prompt one at a time, yielding each decoded
-    output as it is produced. This allows the caller to save results incrementally.
+    Generate continuations in batches, yielding each decoded output as it is produced.
+    Batching keeps the A100's tensor cores busy across the full generation step rather
+    than running a single sequence at a time.  The caller can still save incrementally
+    because we yield one sample at a time.
     """
     prompt_text = resolve_prompt_text(prompt, tokenizer)
-    # prompt_text = prompt # try empty string as prompt, see if it works without BOS token
-    model_inputs = tokenizer([prompt_text], return_tensors="pt").to(model.device)
+
+    # Tokenize once; we'll reuse the same input_ids for every batch.
+    # padding_side="left" is required for decoder-only batched generation so all
+    # sequences share the same right-aligned start position.
+    tokenizer.padding_side = "left"
+    model_inputs = tokenizer([prompt_text], return_tensors="pt", padding=True).to(model.device)
     prompt_len = model_inputs.input_ids.shape[1]
 
-    for _ in range(num_samples):
-        with torch.inference_mode():
+    remaining = num_samples
+    with torch.inference_mode():
+        while remaining > 0:
+            this_batch = min(batch_size, remaining)
+
+            # Expand the single prompt to fill the whole batch.
+            batched_inputs = {
+                k: v.expand(this_batch, -1) for k, v in model_inputs.items()
+            }
+
             generated = model.generate(
-                **model_inputs,
+                **batched_inputs,
                 do_sample=True,
-                num_return_sequences=1,
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 top_p=top_p,
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+                use_cache=True,
             )
-        completion_ids = generated[0][prompt_len:]
-        # skip_special_tokens=True will naturally stop at the first EOS encountered
-        # and won't include it in the final string.
-        decoded_output = tokenizer.decode(completion_ids, skip_special_tokens=True).strip()
-        yield decoded_output
+
+            # Slice off the prompt tokens and decode each sequence in the batch.
+            completion_ids = generated[:, prompt_len:]
+            for seq in completion_ids:
+                # skip_special_tokens=True stops naturally at the first EOS.
+                decoded = tokenizer.decode(seq, skip_special_tokens=True).strip()
+                yield decoded
+
+            remaining -= this_batch
 
 
 
@@ -170,6 +202,16 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Load model in 4-bit quantization if desired.",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=8,
+        help=(
+            "Number of sequences to generate in parallel per forward pass. "
+            "Higher values utilise the A100 more fully but consume more VRAM. "
+            "A batch size of 8-16 is a good starting point for a 40 GB A100. (default: 8)"
+        ),
+    )
     return parser.parse_args()
 
 
@@ -198,6 +240,7 @@ def main():
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
         top_p=args.top_p,
+        batch_size=args.batch_size,
     )
     # Save samples to files in the same format as the training data (one sample per line, no special tokens)
     output_dir = Path(here()) / "generated_samples"

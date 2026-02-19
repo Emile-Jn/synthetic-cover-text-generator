@@ -41,13 +41,32 @@ def analysis(word_counts: list[int]):
     }
     return stats_dict
 
+def pretty_print(stats_dict: dict):
+    """
+    Print the statistics in a human-readable format.
+    Args:
+        stats_dict: A dictionary of statistics on sample lengths, as returned by the analysis function.
+
+    Returns:
+
+    """
+    for key, value in stats_dict.items():
+        if isinstance(value, dict):
+            print(f"{key.capitalize()}:")
+            for sub_key, sub_value in value.items():
+                print(f"  {sub_key}: {sub_value:.2f}")
+        else:
+            print(f"{key.capitalize()}: {value:.2f}")
+
 def main():
     word_counts_original = count_lengths(["data/imdb_reviews.txt"])
     stats_dict_original = analysis(word_counts_original)
-    print("Stats of the original dataset: \n", stats_dict_original)
+    print("Stats of the original dataset: \n")
+    pretty_print(stats_dict_original)
     word_counts_synthetic = count_lengths(["generated_samples/samples.txt", "generated_samples/samples_1.txt"])
     stats_dict_synthetic = analysis(word_counts_synthetic)
-    print("\nStats of the synthetic dataset: \n", stats_dict_synthetic)
+    print("\nStats of the synthetic dataset: \n")
+    pretty_print(stats_dict_synthetic)
 
 if __name__ == "__main__":
     main()
