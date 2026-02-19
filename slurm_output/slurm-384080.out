@@ -1,0 +1,11 @@
+Running on: avm-a100-d-10
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torchao/quantization/quant_api.py:2525: SyntaxWarning: invalid escape sequence '\.'
+  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 5, in <module>
+    from pyprojroot import here
+ModuleNotFoundError: No module named 'pyprojroot'
+Finished.

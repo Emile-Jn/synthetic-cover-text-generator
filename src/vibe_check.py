@@ -32,6 +32,13 @@ def resolve_prompt_text(prompt: str, tokenizer) -> str:
         return tokenizer.decode([tokenizer.bos_token_id])
     raise ValueError("Tokenizer is missing a BOS token; provide a prompt instead.")
 
+def latest_model_path():
+    """
+    Get the path of the latest saved fine-tuned model
+    Returns:
+
+    """
+
 
 def generate_samples(
     model,
@@ -100,7 +107,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model-dir",
         type=str,
-        default=str(here("imdb_qwen3_mimic")),
+        default=None,
         help="Path to the merged fine-tuned model directory.",
     )
     parser.add_argument(

@@ -1,0 +1,23 @@
+Running on: avm-a40-o-4
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A40. Num GPUs = 1. Max memory: 44.448 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.6. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.50s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:05,  2.50s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:08<00:00,  1.83s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:08<00:00,  2.08s/it]
+Prompt: " "
+
+
+=== Sample 1 ===
+'s character is a tough one to figure out in the beginning and i think that 's the whole point of the film you never know if he 's a hero or a villain until the endbr br it 's one of the most original films i 've seen in a long time and i 'll never forget itbr br 10 out of 10br br stardust was another good film and i did n't think it was that good of a film and i think it got more credit than it deservedbr br 7 out of 10br br i
+
+=== Sample 2 ===
+nobody 's perfect but the movie made it so that he was the perfect personbr br i would recommend this movie to anyone who 's looking for a good movie to watch with their family or friends or alone if you 're feeling a little down or sadbr br i give this movie 1010br br also the movie is n't very long it 's about 2 hours and 10 minutes so it 's not a long movie to watchbr br i 've seen this movie on vhs and dvdat it 's just as good as the vhsbr
+
+=== Sample 3 ===
+'s father was a boxer and her brother a football player so it was in the family 's blood to be involved in sports and their daughter wanted to take part too but as a woman she had to go to the other side of the wall to do so in the world of men 's sports where she got a lot of insults and was even called a fag because she was too good at boxing and football for being a girl and did n't know how to do things properly because she was a womanbr br in the end it 's a very touching and inspiring film about friendship and love
+Finished.

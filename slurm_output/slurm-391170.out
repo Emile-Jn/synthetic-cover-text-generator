@@ -1,0 +1,5 @@
+Running on: a-l40s-o-2
+unknown option --partition=GPU-a100s
+usage: python3 [option] ... [-c cmd | -m mod | file | -] [arg] ...
+Try `python -h' for more information.
+Finished.

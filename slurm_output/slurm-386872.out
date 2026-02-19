@@ -1,0 +1,11 @@
+Running on: a-a40-o-1
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+usage: vibe_check.py [-h] [--prompt PROMPT] [--num-samples NUM_SAMPLES]
+                     [--max-new-tokens MAX_NEW_TOKENS]
+                     [--temperature TEMPERATURE] [--top-p TOP_P]
+                     [--model-dir MODEL_DIR] [--max-seq-length MAX_SEQ_LENGTH]
+                     [--load-in-4bit]
+vibe_check.py: error: unrecognized arguments: 
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

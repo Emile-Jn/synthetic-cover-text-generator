@@ -1,0 +1,23 @@
+Running on: avm-a40-o-4
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A40. Num GPUs = 1. Max memory: 44.448 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.6. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.48s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.49s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.51s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:08<00:00,  1.83s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:08<00:00,  2.08s/it]
+Prompt: "The"
+
+
+=== Sample 1 ===
+film was a pleasant surprise in that it was not only a good film but it was a good film that could have been made in the late 70s or early 80s without the benefit of modern special effects technology and the budgetary limitations of today 's filmsbr br the story is a fictionalized version of the life of a young girl who grows up in the early 1900s in the south and eventually becomes a southern belle who becomes the wife of a wealthy industrialist and the mother of two childrenbr br the film 's plot is a little slow moving
+
+=== Sample 2 ===
+acting is superb with each of the four leads having the right tone and timbre to play their characters wellbr br a movie that should be required viewing for anyone who has been affected by breast cancer and should be required viewing for anyone who wants to understand the fragility of life and how important it is to cherish every daybr br i give this film a 10 out of 10 for the best movie i 've ever seen and i hope that the movie will be shown in every hospital and every school and every home and that it will be shown until the day i die and long after
+
+=== Sample 3 ===
+main thing is that it is a great movie and the story is beautiful and it is all about love and friendship and how you can overcome anything with a little bit of help from your friendsbr br the film is n't very long and it is perfect for the summer time or anytime for that matterbr br i recommend it for all of you who are a fan of the princess bride or anyone who loves a good fairy tale or movie with a good twistbr br 10 out of 10 br br alexander zimmermanbr br ps this is the only movie i have ever seen that
+Finished.

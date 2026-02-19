@@ -1,0 +1,6 @@
+Running on: a-a40-o-1
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/home/e12229987/synthetic-cover-text-generator/.venv/bin/python3: Error while finding module specification for 'src.vibe_check.py' (ModuleNotFoundError: __path__ attribute not found on 'src.vibe_check' while trying to find 'src.vibe_check.py'). Try using 'src.vibe_check' instead of 'src.vibe_check.py' as the module name.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

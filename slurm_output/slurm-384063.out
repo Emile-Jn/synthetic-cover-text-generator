@@ -1,0 +1,13 @@
+Running on: a-l40s-o-2
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torch/cuda/__init__.py:184: UserWarning: CUDA initialization: CUDA driver initialization failed, you might not have a CUDA gpu. (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 2, in <module>
+    from unsloth import FastLanguageModel
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/__init__.py", line 87, in <module>
+    DEVICE_TYPE : str = get_device_type()
+                        ~~~~~~~~~~~~~~~^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/__init__.py", line 85, in get_device_type
+    raise NotImplementedError("Unsloth currently only works on NVIDIA GPUs and Intel GPUs.")
+NotImplementedError: Unsloth currently only works on NVIDIA GPUs and Intel GPUs.
+Finished.

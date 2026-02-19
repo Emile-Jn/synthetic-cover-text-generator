@@ -1,0 +1,52 @@
+Running on: a-a100-os-3
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 132, in <module>
+    fine_tune()
+    ~~~~~~~~~^^
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 44, in fine_tune
+    run = wandb.init(
+        project="entropy-steering-steganography",
+    ...<9 lines>...
+        }
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/wandb_init.py", line 1595, in init
+    get_sentry().reraise(e)
+    ~~~~~~~~~~~~~~~~~~~~^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/analytics/sentry.py", line 190, in reraise
+    raise exc.with_traceback(tb)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/wandb_init.py", line 1516, in init
+    wi.maybe_login(init_settings)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/wandb_init.py", line 193, in maybe_login
+    wandb_login._login(
+    ~~~~~~~~~~~~~~~~~~^
+        host=run_settings.base_url,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        update_api_key=explicit_key is None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/wandb_login.py", line 190, in _login
+    auth = _find_or_prompt_for_key(
+        settings,
+    ...<4 lines>...
+        input_timeout=timeout,
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/wandb_login.py", line 266, in _find_or_prompt_for_key
+    auth = wbauth.authenticate_session(
+        host=host,
+    ...<5 lines>...
+        relogin=relogin,
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/wandb/sdk/lib/wbauth/authenticate.py", line 139, in authenticate_session
+    raise UsageError(
+        "No API key configured. Use `wandb login` to log in."
+    ) from None
+wandb.errors.errors.UsageError: No API key configured. Use `wandb login` to log in.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

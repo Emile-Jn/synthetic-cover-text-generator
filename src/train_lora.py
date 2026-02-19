@@ -12,9 +12,10 @@ import unsloth # Has to be imported before transformers to avoid import conflict
 import torch
 from datasets import Dataset
 from trl import SFTTrainer, SFTConfig
+from dotenv import load_dotenv
 from pyprojroot import here
 import wandb
-import datetime
+from datetime import datetime
 import os
 
 def load_text_lines(file_path, eos_token, n=None):
@@ -40,6 +41,9 @@ def load_text_lines(file_path, eos_token, n=None):
     return Dataset.from_dict({"text": lines})
 
 def fine_tune():
+    # load .env from repo root
+    load_dotenv(dotenv_path=here(".env"))
+
     # Initialize wandb
     run = wandb.init(
         project="entropy-steering-steganography",

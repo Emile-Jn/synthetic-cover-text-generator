@@ -1,0 +1,23 @@
+Running on: avm-a40-o-4
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A40. Num GPUs = 1. Max memory: 44.448 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.6. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  2.72s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.72s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:08<00:02,  2.73s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.00s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:09<00:00,  2.26s/it]
+Prompt: ""
+
+
+=== Sample 1 ===
+'s performances are always great but here he 's particularly good as the young and impressionable june 's boyfriend paul who is caught between his love for her and his love for the old country and his family and their valuesbr br the acting is great all around with such a strong supporting cast as well as the two leads that it does n't matter if you 've never seen the stars of this film before or if you 've seen them in other roles it 's just great to watch them all work togetherbr br the story is also good but it 's not as good as
+
+=== Sample 2 ===
+'s the first movie i remember seeing as a child that was not for kids and was n't rated g or pgbr br i think the movie is a bit slow at times but it has some great performances from the actors and actresses that play the roles of the children and adults that are involved in the storybr br the most interesting part of the movie was the use of technology to make the puppets and characters look real and come to life and move and talk and do things that puppets can not do in real lifebr br it 's a pity that they did n't make more movies
+
+=== Sample 3 ===
+'s movie is not the same as the book and i do n't think that any of the movie goers wanted it to be and this is a good thing because they would n't have liked it if it had beenbr br the main thing i think people will remember about this film is the ending and they will be talking about it for a long time after the film has been released and it 's not going to be a bad thing either because it is very memorablebr br the only thing i thought was missing was the soundtrack and it would have been really cool if they had used the music
+Finished.

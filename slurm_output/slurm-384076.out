@@ -1,0 +1,26 @@
+Running on: avm-a100-d-10
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+/home/e12229987/.local/share/uv/python/cpython-3.13.10-linux-x86_64-gnu/lib/python3.13/traceback.py:1511: UserWarning: WARNING: Unsloth should be imported before trl, transformers, peft to ensure all optimizations are applied. Your code may run slower or encounter memory issues without these optimizations.
+
+Please restructure your imports with 'import unsloth' at the top of your file.
+  mod = __import__(exc_value.name)
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 1, in <module>
+    import unsloth # Has to be imported before transformers to avoid import conflicts
+    ^^^^^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/__init__.py", line 261, in <module>
+    from .models import *
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/__init__.py", line 15, in <module>
+    from .llama     import FastLlamaModel
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/llama.py", line 52, in <module>
+    from .vision import FastBaseModel
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/vision.py", line 87, in <module>
+    from unsloth_zoo.vllm_utils import (
+    ...<2 lines>...
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth_zoo/vllm_utils.py", line 63, in <module>
+    from unsloth.models.vision import VLLM_SUPPORTED_VLM
+ImportError: cannot import name 'VLLM_SUPPORTED_VLM' from partially initialized module 'unsloth.models.vision' (most likely due to a circular import) (/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/vision.py)
+Finished.

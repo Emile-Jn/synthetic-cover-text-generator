@@ -1,0 +1,6 @@
+Running on: a-l40s-o-2
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 2, in <module>
+    from unsloth import FastLanguageModel
+ModuleNotFoundError: No module named 'unsloth'
+Finished.

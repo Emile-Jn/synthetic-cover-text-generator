@@ -1,0 +1,37 @@
+Running on: avm-a100-d-10
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A100 80GB PCIe. Num GPUs = 1. Max memory: 79.254 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:07,  2.50s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:04,  2.41s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:07<00:02,  2.39s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.74s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:07<00:00,  1.99s/it]
+Unsloth 2025.10.8 patched 36 layers with 36 QKV layers, 36 O layers and 36 MLP layers.
+num_proc must be <= 5. Reducing num_proc to 5 for dataset of size 5.
+WARNING:datasets.arrow_dataset: num_proc must be <= 5. Reducing num_proc to 5 for dataset of size 5.
+Map (num_proc=5):   0%|          | 0/5 [00:00<?, ? examples/s]Map (num_proc=5):  20%|██        | 1/5 [00:00<00:02,  1.91 examples/s]Map (num_proc=5): 100%|██████████| 5/5 [00:00<00:00,  7.27 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None}.
+==((====))==  Unsloth - 2x faster free finetuning | Num GPUs used = 1
+   \\   /|    Num examples = 5 | Num Epochs = 2 | Total steps = 2
+O^O/ \_/ \    Batch size per device = 8 | Gradient accumulation steps = 4
+\        /    Data Parallel GPUs = 1 | Total batch size (8 x 4 x 1) = 32
+ "-____-"     Trainable parameters = 174,587,904 of 8,365,323,264 (2.09% trained)
+  0%|          | 0/2 [00:00<?, ?it/s] 50%|█████     | 1/2 [00:06<00:06,  6.86s/it]                                              50%|█████     | 1/2 [00:06<00:06,  6.86s/it]100%|██████████| 2/2 [00:07<00:00,  2.97s/it]                                             100%|██████████| 2/2 [00:07<00:00,  2.97s/it]                                             100%|██████████| 2/2 [00:08<00:00,  2.97s/it]100%|██████████| 2/2 [00:08<00:00,  4.24s/it]
+{'loss': 4.4221, 'grad_norm': 1.8961385488510132, 'learning_rate': 0.0, 'epoch': 1.0}
+{'loss': 4.4221, 'grad_norm': 1.8961384296417236, 'learning_rate': 2e-05, 'epoch': 2.0}
+{'train_runtime': 8.4747, 'train_samples_per_second': 1.18, 'train_steps_per_second': 0.236, 'train_loss': 4.422091007232666, 'epoch': 2.0}
+Found HuggingFace hub cache directory: /home/e12229987/.cache/huggingface/hub
+Checking cache directory for required files...
+Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`:   0%|          | 0/4 [00:00<?, ?it/s]Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`:  25%|██▌       | 1/4 [00:02<00:06,  2.23s/it]Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`:  50%|█████     | 2/4 [00:04<00:04,  2.20s/it]Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`:  75%|███████▌  | 3/4 [00:06<00:02,  2.20s/it]Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`: 100%|██████████| 4/4 [00:07<00:00,  1.61s/it]Unsloth: Copying 4 files from cache to `imdb_qwen3_mimic`: 100%|██████████| 4/4 [00:07<00:00,  1.83s/it]
+Successfully copied all 4 files from cache to `imdb_qwen3_mimic`
+Checking cache directory for required files...
+Cache check failed: tokenizer.model not found in local cache.
+Not all required files found in cache. Will proceed with downloading.
+Unsloth: Preparing safetensor model files:   0%|          | 0/4 [00:00<?, ?it/s]Unsloth: Preparing safetensor model files: 100%|██████████| 4/4 [00:00<00:00, 142179.80it/s]
+Unsloth: Merging weights into 16bit:   0%|          | 0/4 [00:00<?, ?it/s]Unsloth: Merging weights into 16bit:  25%|██▌       | 1/4 [00:09<00:29,  9.92s/it]Unsloth: Merging weights into 16bit:  50%|█████     | 2/4 [00:19<00:19,  9.96s/it]Unsloth: Merging weights into 16bit:  75%|███████▌  | 3/4 [00:29<00:09,  9.72s/it]Unsloth: Merging weights into 16bit: 100%|██████████| 4/4 [00:32<00:00,  7.03s/it]Unsloth: Merging weights into 16bit: 100%|██████████| 4/4 [00:32<00:00,  8.06s/it]
+Unsloth: Merge process complete. Saved to `/home/e12229987/synthetic-cover-text-generator/imdb_qwen3_mimic`
+Training complete. Adapter saved to 'imdb_qwen3_mimic'
+Finished.

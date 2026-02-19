@@ -1,0 +1,88 @@
+Running on: a-l40s-o-1
+`torch_dtype` is deprecated! Use `dtype` instead!
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/hello_world.py", line 12, in <module>
+    pipe = pipeline(
+        "text-generation",
+    ...<2 lines>...
+        device_map="auto",
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/__init__.py", line 836, in pipeline
+    model = load_model(
+        adapter_path if adapter_path is not None else model,
+    ...<4 lines>...
+        **model_kwargs,
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/base.py", line 268, in load_model
+    raise ValueError(
+        f"Could not load model {model} with any of the following classes: {class_tuple}. See the original errors:\n\n{error}\n"
+    )
+ValueError: Could not load model Qwen/Qwen3-8B with any of the following classes: (<class 'transformers.models.auto.modeling_auto.AutoModelForCausalLM'>, <class 'transformers.models.qwen3.modeling_qwen3.Qwen3ForCausalLM'>). See the original errors:
+
+while loading with AutoModelForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/base.py", line 232, in load_model
+    model = model_class.from_pretrained(model, **kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/models/auto/auto_factory.py", line 374, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 3928, in from_pretrained
+    device_map = check_and_set_device_map(device_map)  # warn, error and fix the device map
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/integrations/accelerate.py", line 134, in check_and_set_device_map
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/base.py", line 248, in load_model
+    model = model_class.from_pretrained(model, **fp32_kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/models/auto/auto_factory.py", line 374, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 3928, in from_pretrained
+    device_map = check_and_set_device_map(device_map)  # warn, error and fix the device map
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/integrations/accelerate.py", line 134, in check_and_set_device_map
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+while loading with Qwen3ForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/base.py", line 232, in load_model
+    model = model_class.from_pretrained(model, **kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 3928, in from_pretrained
+    device_map = check_and_set_device_map(device_map)  # warn, error and fix the device map
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/integrations/accelerate.py", line 134, in check_and_set_device_map
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/pipelines/base.py", line 248, in load_model
+    model = model_class.from_pretrained(model, **fp32_kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 3928, in from_pretrained
+    device_map = check_and_set_device_map(device_map)  # warn, error and fix the device map
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/integrations/accelerate.py", line 134, in check_and_set_device_map
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Using a `device_map`, `tp_plan`, `torch.device` context manager or setting `torch.set_default_device(device)` requires `accelerate`. You can install it with `pip install accelerate`
+
+
+
+Finished.

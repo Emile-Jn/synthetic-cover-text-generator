@@ -1,0 +1,112 @@
+Running on: a-a40-o-1
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A40. Num GPUs = 1. Max memory: 44.448 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.6. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 136, in <module>
+    main()
+    ~~~~^^
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 116, in main
+    model, tokenizer = load_model(
+                       ~~~~~~~~~~^
+        model_dir=args.model_dir,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+        max_seq_length=args.max_seq_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        load_in_4bit=args.load_in_4bit,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 11, in load_model
+    model, tokenizer = unsloth.FastLanguageModel.from_pretrained(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model_name=model_dir,
+        ^^^^^^^^^^^^^^^^^^^^^
+        max_seq_length=max_seq_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        load_in_4bit=load_in_4bit,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/loader.py", line 480, in from_pretrained
+    model, tokenizer = dispatch_model.from_pretrained(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model_name        = model_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<18 lines>...
+        *args, **kwargs,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/qwen3.py", line 436, in from_pretrained
+    return FastLlamaModel.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model_name        = model_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/llama.py", line 2035, in from_pretrained
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+    ...<7 lines>...
+        **kwargs,
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 288, in _wrapper
+    return func(*args, **kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 5179, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model,
+        ^^^^^^
+    ...<13 lines>...
+        weights_only=weights_only,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 5642, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ~~~~~~~~~~~~~~~^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 946, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model_to_load,
+        ^^^^^^^^^^^^^^
+    ...<13 lines>...
+        device_mesh=device_mesh,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 850, in _load_state_dict_into_meta_model
+    _load_parameter_into_model(model, param_name, param.to(param_device))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/transformers/modeling_utils.py", line 710, in _load_parameter_into_model
+    module.load_state_dict({param_type: tensor}, strict=False, assign=True)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torch/nn/modules/module.py", line 2635, in load_state_dict
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Error(s) in loading state_dict for Linear:
+	size mismatch for weight: copying a param with shape torch.Size([4096, 12288]) from checkpoint, the shape in current model is torch.Size([4096, 22016]).
+Finished.

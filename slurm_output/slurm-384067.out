@@ -1,0 +1,20 @@
+Running on: a-a100-q-5
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torchao/quantization/quant_api.py:2525: SyntaxWarning: invalid escape sequence '\.'
+  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 2, in <module>
+    from unsloth import FastLanguageModel
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/__init__.py", line 261, in <module>
+    from .models import *
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/__init__.py", line 15, in <module>
+    from .llama     import FastLlamaModel
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/llama.py", line 20, in <module>
+    from ._utils import *
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/_utils.py", line 448, in <module>
+    exec(config, globals())
+    ~~~~^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 1, in <module>
+NameError: name 'PreTrainedConfig' is not defined. Did you mean: 'PretrainedConfig'?
+Finished.
