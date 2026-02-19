@@ -3,15 +3,15 @@ Script to generate text samples from the fine-tuned Qwen3 model using unsloth.Fa
 The purpose here is to create a dataset in the same format as the data the model was fine-tuned on.
 
 Run this on the slurm cluster with a command like:
-
+sbatch --partition=GPU-a100s run.sh -m src.vibe_check --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 200
 """
 
 import argparse
-from typing import List
-from pathlib import Path
-import re
+import time
 from datetime import datetime
-from typing import Optional
+from pathlib import Path
+from typing import List, Optional
+import re
 
 import torch
 from pyprojroot import here
@@ -85,33 +85,31 @@ def generate_samples(
     max_new_tokens: int,
     temperature: float,
     top_p: float,
-) -> List[str]:
+):
     """
-    Generate multiple continuations for a single prompt.
+    Generate continuations for a single prompt one at a time, yielding each decoded
+    output as it is produced. This allows the caller to save results incrementally.
     """
     prompt_text = resolve_prompt_text(prompt, tokenizer)
     # prompt_text = prompt # try empty string as prompt, see if it works without BOS token
     model_inputs = tokenizer([prompt_text], return_tensors="pt").to(model.device)
-    with torch.inference_mode():
-        generated = model.generate(
-            **model_inputs,
-            do_sample=True,
-            num_return_sequences=num_samples,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-        )
     prompt_len = model_inputs.input_ids.shape[1]
-    outputs = []
 
-    for seq in generated:
-        # Slice off the prompt
-        completion_ids = seq[prompt_len:]
+    for _ in range(num_samples):
+        with torch.inference_mode():
+            generated = model.generate(
+                **model_inputs,
+                do_sample=True,
+                num_return_sequences=1,
+                max_new_tokens=max_new_tokens,
+                temperature=temperature,
+                top_p=top_p,
+            )
+        completion_ids = generated[0][prompt_len:]
         # skip_special_tokens=True will naturally stop at the first EOS encountered
         # and won't include it in the final string.
         decoded_output = tokenizer.decode(completion_ids, skip_special_tokens=True).strip()
-        outputs.append(decoded_output)
-    return outputs
+        yield decoded_output
 
 
 
@@ -128,7 +126,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--num-samples",
         type=int,
-        default=3,
+        default=1000,
         help="Number of outputs to generate.",
     )
     parser.add_argument(
@@ -154,6 +152,12 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default=None,
         help="Path to the merged fine-tuned model directory.",
+    )
+    parser.add_argument(
+        "--save-every",
+        type=int,
+        default=100,
+        help="Flush generated samples to disk every N samples (default: 100).",
     )
     parser.add_argument(
         "--max-seq-length",
@@ -199,10 +203,34 @@ def main():
     output_dir = Path(here()) / "generated_samples"
     output_dir.mkdir(exist_ok=True)
     output_file = output_dir / "samples.txt"
+    total_generated = 0
+    buffer: List[str] = []
+    t_start = time.perf_counter()
+
     with output_file.open("w", encoding="utf-8") as f:
         for sample in samples:
-            f.write(sample.replace("\n", " ").strip() + "\n")
-    print(f"Generated {len(samples)} samples saved to {output_file}")
+            buffer.append(sample.replace("\n", " ").strip())
+            total_generated += 1
+            if total_generated % args.save_every == 0:
+                f.write("\n".join(buffer) + "\n")
+                f.flush()
+                buffer = []
+                elapsed = time.perf_counter() - t_start
+                print(
+                    f"Saved {total_generated}/{args.num_samples} samples "
+                    f"({elapsed:.1f}s elapsed, {elapsed / total_generated:.2f}s/sample)"
+                )
+        # Write any remaining samples
+        if buffer:
+            f.write("\n".join(buffer) + "\n")
+            f.flush()
+
+    total_time = time.perf_counter() - t_start
+    print(
+        f"\nDone. Generated {total_generated} samples in {total_time:.1f}s "
+        f"({total_time / total_generated:.2f}s/sample). "
+        f"Saved to {output_file}"
+    )
 
 
 if __name__ == "__main__":
