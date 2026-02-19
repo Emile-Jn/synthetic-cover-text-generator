@@ -86,11 +86,8 @@ def generate_samples(
     temperature: float,
     top_p: float,
 ) -> List[str]:
-    """Generate multiple continuations for a single prompt.
-
-    Truncate each generated completion at the first occurrence of the tokenizer's EOS token
-    that appears after the prompt (so we don't treat an EOS token present in the prompt as
-    an end-of-generation signal).
+    """
+    Generate multiple continuations for a single prompt.
     """
     prompt_text = resolve_prompt_text(prompt, tokenizer)
     # prompt_text = prompt # try empty string as prompt, see if it works without BOS token
@@ -107,31 +104,15 @@ def generate_samples(
     prompt_len = model_inputs.input_ids.shape[1]
     outputs = []
 
-    # Get EOS token id (may be None for some tokenizers)
-    eos_id = getattr(tokenizer, "eos_token_id", None)
-    # Some tokenizers expose an eos_token string but not eos_token_id; try converting it to an id
-    if eos_id is None and getattr(tokenizer, "eos_token", None) is not None:
-        try:
-            eos_id = tokenizer.convert_tokens_to_ids(tokenizer.eos_token)
-            # convert_tokens_to_ids may return a list for multi-token strings; handle that
-            if isinstance(eos_id, (list, tuple)) and len(eos_id) > 0:
-                eos_id = int(eos_id[0])
-            elif isinstance(eos_id, int):
-                eos_id = int(eos_id)
-            else:
-                eos_id = None
-        except Exception:
-            eos_id = None
-
     for seq in generated:
         # Slice off the prompt
         completion_ids = seq[prompt_len:]
-
         # skip_special_tokens=True will naturally stop at the first EOS encountered
         # and won't include it in the final string.
         decoded_output = tokenizer.decode(completion_ids, skip_special_tokens=True).strip()
         outputs.append(decoded_output)
     return outputs
+
 
 
 def parse_args() -> argparse.Namespace:

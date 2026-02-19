@@ -14,47 +14,7 @@ import torch
 import os
 
 # Custom modules
-from src.generate_synthetic_cover_text import load_model, resolve_prompt_text, latest_model_path
-
-
-def generate_samples(
-    model,
-    tokenizer,
-    prompt: str,
-    num_samples: int,
-    max_new_tokens: int,
-    temperature: float,
-    top_p: float,
-) -> List[str]:
-    """Generate multiple continuations for a single prompt.
-
-    Truncate each generated completion at the first occurrence of the tokenizer's EOS token
-    that appears after the prompt (so we don't treat an EOS token present in the prompt as
-    an end-of-generation signal).
-    """
-    prompt_text = resolve_prompt_text(prompt, tokenizer)
-    # prompt_text = prompt # try empty string as prompt, see if it works without BOS token
-    model_inputs = tokenizer([prompt_text], return_tensors="pt").to(model.device)
-    with torch.inference_mode():
-        generated = model.generate(
-            **model_inputs,
-            do_sample=True,
-            num_return_sequences=num_samples,
-            max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            top_p=top_p,
-        )
-    prompt_len = model_inputs.input_ids.shape[1]
-    outputs = []
-
-    for seq in generated:
-        # Slice off the prompt
-        completion_ids = seq[prompt_len:]
-        # skip_special_tokens=True will naturally stop at the first EOS encountered
-        # and won't include it in the final string.
-        decoded_output = tokenizer.decode(completion_ids, skip_special_tokens=True).strip()
-        outputs.append(decoded_output)
-    return outputs
+from src.generate_synthetic_cover_text import load_model, latest_model_path, generate_samples
 
 
 def parse_args() -> argparse.Namespace:
