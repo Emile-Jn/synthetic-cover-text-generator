@@ -17,6 +17,7 @@ from pyprojroot import here
 import wandb
 from datetime import datetime
 import os
+import argparse
 
 def load_text_lines(file_path, eos_token, n=None):
     """
@@ -40,7 +41,9 @@ def load_text_lines(file_path, eos_token, n=None):
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
 
-def fine_tune():
+def fine_tune(model_name: str = "unsloth/Qwen3-8B",
+              data_file: str = "imdb_reviews.txt",
+              max_seq_length: int = 512):
     # load .env from repo root
     load_dotenv(dotenv_path=here(".env"))
 
@@ -48,8 +51,8 @@ def fine_tune():
     run = wandb.init(
         project="entropy-steering-steganography",
         config={
-            "model_name": "unsloth/Qwen3-8B",
-            "max_seq_length": 512,
+            "model_name": model_name,
+            "max_seq_length": max_seq_length,
             "lora_r": 64,
             "lora_alpha": 64,
             "learning_rate": 2e-4,
@@ -63,11 +66,9 @@ def fine_tune():
     # Example: outputs/20260219_1155_sunny-wizard-42
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     run_name = run.name if run.name else "run"
-    output_dir = os.path.join("outputs", f"{timestamp}_{run_name}")
+    output_dir = os.path.join("fine_tuned_models", f"{timestamp}_{run_name}")
 
     # 1. Configuration
-    model_name = "unsloth/Qwen3-8B" # Base model
-    max_seq_length = 512            # IMDb reviews are usually within this limit
     load_in_4bit = False            # On A100, we use full bfloat16 for better quality
 
     # 2. Load Model & Tokenizer
@@ -90,7 +91,7 @@ def fine_tune():
     )
 
     # 4. Load your data
-    dataset = load_text_lines(here("data/imdb_reviews.txt"), tokenizer.eos_token)
+    dataset = load_text_lines(here(f"data/{data_file}"), tokenizer.eos_token)
 
     # 5. Set up Trainer
     trainer = SFTTrainer(
@@ -133,4 +134,28 @@ def fine_tune():
     wandb.finish()
 
 if __name__ == "__main__":
-    fine_tune()
+    parser = argparse.ArgumentParser(description="Fine-tune a model using LoRA adapters.")
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default="unsloth/Qwen3-8B",
+        help="HuggingFace model name or path (default: unsloth/Qwen3-8B)",
+    )
+    parser.add_argument(
+        "--data-file",
+        type=str,
+        default="imdb_reviews.txt",
+        help="Filename inside data/ to use for training (default: imdb_reviews.txt)",
+    )
+    parser.add_argument(
+        "--max-seq-length",
+        type=int,
+        default=512,
+        help="Maximum token sequence length (default: 512)",
+    )
+    args = parser.parse_args()
+    fine_tune(
+        model_name=args.model_name,
+        data_file=args.data_file,
+        max_seq_length=args.max_seq_length,
+    )
