@@ -39,5 +39,8 @@ Choose the data file in `data/` and the huggingface model and run this command (
 python3 -m src.train_lora --data_file your_data.txt --model_name your_huggingface_model
 ```
 
-### 4. Generate a synthetic cover text dataset (optional)
-Choose a fine-tuned model among those available
+### 4. Generate a synthetic cover text dataset
+Choose a fine-tuned model among those available in `fine_tuned_models/` and run this command (adapt it as needed):
+```shell
+python3 -m src.generate_synthetic_cover_text --model_path path_to_fine_tuned_model --num-samples 1000 --prompt ""
+```

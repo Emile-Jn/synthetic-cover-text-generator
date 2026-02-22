@@ -3,7 +3,7 @@ Script to generate text samples from the fine-tuned Qwen3 model using unsloth.Fa
 The purpose here is to create a dataset in the same format as the data the model was fine-tuned on.
 
 Run this on the slurm cluster with a command like:
-sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --prompt "" --model-dir "imdb_qwen3_mimic" --num-samples 10000 --batch-size 16
+sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --prompt "" --model-path "imdb_qwen3_mimic" --num-samples 10000 --batch-size 16
 """
 
 import argparse
@@ -152,7 +152,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--prompt",
         type=str,
-        default="Write a short IMDb-style movie review about an underrated film.",
+        default="",
         help="Seed text to condition generation.",
     )
     parser.add_argument(
@@ -180,7 +180,7 @@ def parse_args() -> argparse.Namespace:
         help="Top-p (nucleus) sampling cutoff.",
     )
     parser.add_argument(
-        "--model-dir",
+        "--model-path",
         type=str,
         default=None,
         help="Path to the merged fine-tuned model directory.",
@@ -218,7 +218,7 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     # If no model dir is provided, try to find the latest saved model under outputs/
-    model_dir = args.model_dir
+    model_dir = args.model_path
     if not model_dir:
         model_dir = latest_model_path()
         if not model_dir:
