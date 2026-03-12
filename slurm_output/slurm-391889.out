@@ -1,0 +1,17 @@
+Running on: a-a100-q-5
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A100-SXM4-80GB. Num GPUs = 1. Max memory: 79.254 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:04<00:13,  4.41s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:09<00:09,  4.55s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:13<00:04,  4.53s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:15<00:00,  3.37s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:15<00:00,  3.79s/it]
+Using EOS token as prompt.
+Saved 100/200 samples (11.2s elapsed, 0.11s/sample)
+Saved 200/200 samples (18.1s elapsed, 0.09s/sample)
+
+Done. Generated 200 samples in 18.1s (0.09s/sample). Saved to /home/e12229987/synthetic-cover-text-generator/generated_samples/samples_2.txt
+Finished.

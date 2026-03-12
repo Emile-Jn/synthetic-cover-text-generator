@@ -1,0 +1,15 @@
+Running on: a-a100-q-5
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+usage: generate_synthetic_cover_text.py [-h] [--prompt PROMPT]
+                                        [--num-samples NUM_SAMPLES]
+                                        [--max-new-tokens MAX_NEW_TOKENS]
+                                        [--temperature TEMPERATURE]
+                                        [--top-p TOP_P]
+                                        [--model-dir MODEL_DIR]
+                                        [--save-every SAVE_EVERY]
+                                        [--max-seq-length MAX_SEQ_LENGTH]
+                                        [--load-in-4bit]
+generate_synthetic_cover_text.py: error: unrecognized arguments: --batch-size 16
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

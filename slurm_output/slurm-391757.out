@@ -1,0 +1,615 @@
+Running on: a-a100-qs-7
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A100-SXM4-40GB. Num GPUs = 1. Max memory: 39.496 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:05<00:15,  5.11s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:10<00:10,  5.00s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:15<00:05,  5.11s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:16<00:00,  3.66s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:16<00:00,  4.18s/it]
+Prompt: ""
+
+Using EOS token as prompt.
+
+=== Sample 1 ===
+i can only recommend it to those who have an open mind and are not afraid to explore a wide range of topicsbr br this movie is not for everyone
+
+=== Sample 2 ===
+i have never seen him do anything like this before
+
+=== Sample 3 ===
+the story is about the life of a woman who is the daughter of a priest
+
+=== Sample 4 ===
+the only reason i'm giving it 9 is because the ending was n't quite as strong as i had hoped
+
+=== Sample 5 ===
+it 's not only a story about a boy who falls in love with a girl but it 's also a story about the power of music and the importance of family
+
+=== Sample 6 ===
+there is something very funny about the scene in which stewart tells a story of a man who had a gun and decided to go out and shoot a chickenbr br the story of the man who wanted to get back at the law is a good one and i think that the film version is a good one
+
+=== Sample 7 ===
+it 's about a young man who 's just graduated from high school and he goes on a trip to the states with his uncle
+
+=== Sample 8 ===
+he was also in the recent star wars episode i and is a very familiar face in the world of fantasy
+
+=== Sample 9 ===
+i thought it was a good movie
+
+=== Sample 10 ===
+he has a wonderful sense of humor and a great personality and he is a very fine actor
+
+=== Sample 11 ===
+the acting is superb the plot is tight and the ending is a perfect example of how a story should end
+
+=== Sample 12 ===
+and the characters that make up this movie are so real and true to life that you cannot help but to be affected by thembr br i could go on and on about the movie but i think i have said enough to convince you to see it
+
+=== Sample 13 ===
+it 's a really funny film that i would definitely recommend to anyone
+
+=== Sample 14 ===
+i 've seen this movie twice and will probably see it a third time before the summer is over
+
+=== Sample 15 ===
+the story is about a young boy named peter who is visited by his dead uncle and told he must go to the far north and find a stone he has to get the stone and bring it back to his uncle to give to peter to give him a chance to live
+
+=== Sample 16 ===
+the story is about a young woman who is trying to make her way in life and ends up meeting a man who has a tragic past
+
+=== Sample 17 ===
+i was wrong
+
+=== Sample 18 ===
+i am a fan of both of the main actors in the film
+
+=== Sample 19 ===
+it is a great movie but it is n't for everyone
+
+=== Sample 20 ===
+the story is about a young man who gets involved with a group of other young men and women who are part of the counterculture of the late sixties
+
+=== Sample 21 ===
+i'm so glad that i did n't know that and that i watched this movie with fresh eyes
+
+=== Sample 22 ===
+the story is an allegory of the old and new worlds and their cultures
+
+=== Sample 23 ===
+if you have never seen a film by peter weir then this is the one to start with
+
+=== Sample 24 ===
+the music is very nice as well
+
+=== Sample 25 ===
+i'm a huge fan of the ramones and i was hoping for a movie like rock and roll high school but with the ramones
+
+=== Sample 26 ===
+i have seen a lot of movies in my time but i have never been so impressed
+
+=== Sample 27 ===
+the characters are all so endearing
+
+=== Sample 28 ===
+this is not a movie for everyone but it is a movie for me
+
+=== Sample 29 ===
+the movie was very good
+
+=== Sample 30 ===
+it was a great film
+
+=== Sample 31 ===
+and i thought the ending was just perfectbr br all in all a must see for all horror fans
+
+=== Sample 32 ===
+i do n't know what else to say
+
+=== Sample 33 ===
+this movie is not a romantic movie
+
+=== Sample 34 ===
+and that 's what makes this movie special
+
+=== Sample 35 ===
+the acting is very good and the characters are welldefined
+
+=== Sample 36 ===
+the story is told in a non linear fashion but the story is still easy to follow
+
+=== Sample 37 ===
+the most interesting character in the film is the old man played by the great john gilbert
+
+=== Sample 38 ===
+i am not a big fan of the genre but this movie was definitely worth watching
+
+=== Sample 39 ===
+the film is a very good example of a low budget high concept film
+
+=== Sample 40 ===
+i think the actors are very good and i think the script is very good
+
+=== Sample 41 ===
+if you liked the princess bride or even the castle keep this in your mind
+
+=== Sample 42 ===
+i have seen the film twice and i would like to see it again
+
+=== Sample 43 ===
+the color purple is a film that is full of drama and emotion
+
+=== Sample 44 ===
+the movie is a great example of this
+
+=== Sample 45 ===
+it was the best movie i 've seen all year
+
+=== Sample 46 ===
+but this time around it 's a lot more than that
+
+=== Sample 47 ===
+there 's no way of knowing but i 'd say it 's a 9 or 10 out of 10 for me
+
+=== Sample 48 ===
+i have to say that i was surprised at the end
+
+=== Sample 49 ===
+a movie about the journey of life and the many twists and turns it takes
+
+=== Sample 50 ===
+i was also impressed with the movie 's ending which i thought was very original and very good
+
+=== Sample 51 ===
+the acting was superb
+
+=== Sample 52 ===
+the film is a nice blend of adventure and humor and has a very good story
+
+=== Sample 53 ===
+the story is a bit on the simple side but this is more a movie to be enjoyed by all ages and it is a movie that can be enjoyed by all ages
+
+=== Sample 54 ===
+if you are a fan of the ramones you will love this film
+
+=== Sample 55 ===
+the story of a woman who takes a job at a hospital in a small town and ends up falling in love with a doctor there
+
+=== Sample 56 ===
+the cast is a perfect match for the characters
+
+=== Sample 57 ===
+but i loved this film
+
+=== Sample 58 ===
+in the end though the movie 's a good time
+
+=== Sample 59 ===
+the only time when the film seems to drag is when the ramones perform live
+
+=== Sample 60 ===
+in fact he 's even better than he was in the first one
+
+=== Sample 61 ===
+i 'd seen the trailer and thought it was n't going to be my kind of movie
+
+=== Sample 62 ===
+the film is a great example of the power of cinema to bring people together
+
+=== Sample 63 ===
+the story of the film is of course the legendary love story between demille and her leading man the beautiful but uncaring hollywood star douglas fairbanks
+
+=== Sample 64 ===
+i saw the movie called the ring
+
+=== Sample 65 ===
+and i'm not sure what it is about the film that prevents me from enjoying it
+
+=== Sample 66 ===
+it 's about the friendship between two girls who are very different but become best friends
+
+=== Sample 67 ===
+it is the film of the year for me
+
+=== Sample 68 ===
+the color purple is about the struggle that black women have to go through in order to survive
+
+=== Sample 69 ===
+in 1985 there was a movie called the color purple that i saw but was not very impressed with
+
+=== Sample 70 ===
+the story is that of a young woman called julia who is a very intelligent and successful businesswoman
+
+=== Sample 71 ===
+it 's an enjoyable movie
+
+=== Sample 72 ===
+the story is very much about a brother and sister growing up
+
+=== Sample 73 ===
+the movie was well casted and i loved the ending
+
+=== Sample 74 ===
+as a matter of fact i would rate it a 710
+
+=== Sample 75 ===
+the only one of these movies i have n't seen is the last wave
+
+=== Sample 76 ===
+he is a very likable character and one that i think that most people will enjoy
+
+=== Sample 77 ===
+br br i think that this is one of the most entertaining and funny movies that i 've seen in a while
+
+=== Sample 78 ===
+it was the most beautiful film i have ever seen
+
+=== Sample 79 ===
+i had never seen the movie but i have read the book
+
+=== Sample 80 ===
+this movie is a must see for any fan of the ramones or punk rock in general
+
+=== Sample 81 ===
+the movie is an excellent representation of the novel
+
+=== Sample 82 ===
+the characters are well developed and the storyline is engaging
+
+=== Sample 83 ===
+this is a very good movie and i think that it has a lot of potential for the future
+
+=== Sample 84 ===
+the film is a powerful and moving story of the horrors of war and the need for peace
+
+=== Sample 85 ===
+i also appreciated the ending of the film
+
+=== Sample 86 ===
+the script was a bit predictable but i loved the fact that it was n't afraid to take a few risks
+
+=== Sample 87 ===
+the film is a nice little piece of work that 's a treat for the eyes and ears
+
+=== Sample 88 ===
+it is n't the first time i have seen the movie but every time it makes me laugh even more
+
+=== Sample 89 ===
+you are a student in one of the best high schools in america
+
+=== Sample 90 ===
+they are not only beautiful but their acting is perfect
+
+=== Sample 91 ===
+but i think she did a great job with the role
+
+=== Sample 92 ===
+i know i should n't say that because i have n't seen it
+
+=== Sample 93 ===
+the film was beautiful and well acted with great music and a very good script
+
+=== Sample 94 ===
+the only time when the film feels slow is when it 's trying to cram in all the elements of the legend
+
+=== Sample 95 ===
+this movie has one of the greatest endings to any movie ever
+
+=== Sample 96 ===
+i think the best part about this movie is that it does n't try to be something it is not
+
+=== Sample 97 ===
+i do n't know
+
+=== Sample 98 ===
+i had never heard of it until i saw it on the list of the 200 best films of all time on the imdb
+
+=== Sample 99 ===
+i really enjoyed the movie
+
+=== Sample 100 ===
+a lot of people might not even realize it was made until it was shown in the late 80 's on the movie channel
+
+=== Sample 101 ===
+the only person who is a true romantic is the killer
+
+=== Sample 102 ===
+this is an exciting film that has a lot going for it
+
+=== Sample 103 ===
+i'm not saying the movie was perfect
+
+=== Sample 104 ===
+but as a matter of fact he is a really good actor and he really brings the character of stanley to life
+
+=== Sample 105 ===
+i am sure that i will watch this again
+
+=== Sample 106 ===
+the only thing that made me not give it 1010 was that i could n't find a dvd version
+
+=== Sample 107 ===
+this is the real story
+
+=== Sample 108 ===
+it 's also a great example of how a movie can be just as good if not better than a book
+
+=== Sample 109 ===
+this is an excellent movie and i hope to see it on video or dvd
+
+=== Sample 110 ===
+i'm not sure if this is a good or bad thing
+
+=== Sample 111 ===
+the cast is fantastic the story is fantastic the soundtrack is fantastic and the editing is fantastic
+
+=== Sample 112 ===
+i'm a movie buff and i had not heard of this movie until it was shown at the library
+
+=== Sample 113 ===
+if you are looking for a movie to watch with your family and you are n't looking for something too scary then this is a great movie to watch
+
+=== Sample 114 ===
+this movie is a classic
+
+=== Sample 115 ===
+i like how it was done in the movie and it was a great movie overall
+
+=== Sample 116 ===
+the film is a little slow in the first half but once the movie kicks into gear it 's a real treat
+
+=== Sample 117 ===
+he is a man who is at war with himself
+
+=== Sample 118 ===
+i have to admit that i have never been much of a fan of spielberg 's movies
+
+=== Sample 119 ===
+in my opinion this is one of the best horror movies ever made
+
+=== Sample 120 ===
+and if you 're a girl like me you 'll love it
+
+=== Sample 121 ===
+the only thing that will really make a movie is a good story and in this movie the story is very good
+
+=== Sample 122 ===
+it is about the struggle of a young black woman in a white male dominated profession and how she fights for recognition and respect
+
+=== Sample 123 ===
+i 've seen this movie 10 times already and i'm not bored of it
+
+=== Sample 124 ===
+i'm not a big fan of horror movies but this one was really good
+
+=== Sample 125 ===
+the story is about the life of a young woman in the south
+
+=== Sample 126 ===
+and the other actors are just as good as they could be
+
+=== Sample 127 ===
+the last wave is a very good movie
+
+=== Sample 128 ===
+a must see for any fan of the genre
+
+=== Sample 129 ===
+this is a very good film
+
+=== Sample 130 ===
+she is so beautiful and her performance was so great
+
+=== Sample 131 ===
+br br the movie is n't about the characters but about the relationships they have with each other and about the bond between them
+
+=== Sample 132 ===
+the color purple was a movie that was a real tearjerker
+
+=== Sample 133 ===
+the music is fantastic and the whole thing is a great example of how movies should be made
+
+=== Sample 134 ===
+the last wave is an interesting movie and well worth watching
+
+=== Sample 135 ===
+i think i 've watched it at least a hundred times and i never get tired of it
+
+=== Sample 136 ===
+she also has a lot of sex appeal
+
+=== Sample 137 ===
+i also love the scene where she has to make her case to her lawyer and how she gets him to agree with her
+
+=== Sample 138 ===
+the color purple is a very well made movie that really shows what life was like for black women in the early to mid20th century
+
+=== Sample 139 ===
+the film has a dreamlike quality and is at times a bit confusing
+
+=== Sample 140 ===
+and if you can get past that then you 'll love this movie
+
+=== Sample 141 ===
+this film is a classic
+
+=== Sample 142 ===
+i have seen some of his other movies but none are as good as this
+
+=== Sample 143 ===
+the movie is good but nothing to scream about
+
+=== Sample 144 ===
+i do n't know if it 's because i 've become jaded or if the movies have n't been as good as they were a couple of years ago but this movie was n't as good as it should have been
+
+=== Sample 145 ===
+they have to be the most beautiful and well known actors in the business
+
+=== Sample 146 ===
+the story is about a girl named annie who is in a relationship with a boy named jason
+
+=== Sample 147 ===
+i am an african american woman who is very proud of my culture
+
+=== Sample 148 ===
+i had n't seen this movie in a while and decided to watch it again on cable
+
+=== Sample 149 ===
+the story is n't very complex but it is still very entertaining
+
+=== Sample 150 ===
+i can see why it was nominated for best picture
+
+=== Sample 151 ===
+the movie is basically a romantic comedy with a murder mystery thrown in for spice
+
+=== Sample 152 ===
+it 's a very good film and i hope it gets more recognition
+
+=== Sample 153 ===
+the last wave is the most original and effective horror film since the evil dead
+
+=== Sample 154 ===
+the film is basically the story of how he came to be a hero
+
+=== Sample 155 ===
+the film 's climax is when we finally meet the young man at the hospital
+
+=== Sample 156 ===
+there are a lot of great things about this movie
+
+=== Sample 157 ===
+i'm still not sure i could say what it was about the film that was so enchanting and yet i feel the need to say it was n't the acting or the plot or the cinematography it was something deeper something more profound
+
+=== Sample 158 ===
+i am a huge fan of the original star trek series
+
+=== Sample 159 ===
+the movie was not just a simple story about a boy and his dog
+
+=== Sample 160 ===
+in fact the acting is superb
+
+=== Sample 161 ===
+you can see this in the scene where they are in the hospital and he is describing his life
+
+=== Sample 162 ===
+br br the cast is fantastic with claire danes as the headstrong and intelligent celie and oprah winfrey as the gentle and loving shug alicia keys as the young and lovely nettie and danny glover as the gentle and loving mister
+
+=== Sample 163 ===
+it 's like the old saying go with the flow
+
+=== Sample 164 ===
+a story about a man who loses his job and tries to find a job
+
+=== Sample 165 ===
+the movie is a bit on the short side but it has a lot of good action scenes
+
+=== Sample 166 ===
+it 's the perfect movie for a cold winter night and for a romantic couple
+
+=== Sample 167 ===
+the actors are excellent the story is a little slow and the whole thing is just a little bit too long
+
+=== Sample 168 ===
+this is a wonderful film that will not only touch your heart but also make you think
+
+=== Sample 169 ===
+it 's not an easy film to follow but it is a film that stays with you
+
+=== Sample 170 ===
+the only time it was boring was when they were just talking about their day and not really getting into the actual events
+
+=== Sample 171 ===
+the movie starts out with a young girl named carla who is the daughter of a wealthy businessman
+
+=== Sample 172 ===
+the acting is great and the story is amazing
+
+=== Sample 173 ===
+but he seems to have been convinced that the movie was just too good to be true and that he was being scammedbr br in the movie i 've got a little crush on both of the leads
+
+=== Sample 174 ===
+in this case the two parts are very different from each other
+
+=== Sample 175 ===
+when i first saw this movie i was 10 years old and it was a big hit for me
+
+=== Sample 176 ===
+the movie is full of scenes that will make you laugh and cry
+
+=== Sample 177 ===
+he is a brilliant writer and director and a wonderful actor
+
+=== Sample 178 ===
+i just love this show
+
+=== Sample 179 ===
+i have read that the film is not about a young girl but about the story of the movie itself
+
+=== Sample 180 ===
+i think that this movie is the best that they have ever made
+
+=== Sample 181 ===
+he is also a very good actor and the scenes where he interacts with the other actors is great
+
+=== Sample 182 ===
+the story is about how a family of 4 deals with the absence of their father who is in prison for the murder of a man who tried to steal his car
+
+=== Sample 183 ===
+i can only hope that someday the public will see the error of their ways and realize that they are missing out on a lot of great stuff
+
+=== Sample 184 ===
+i 'd like to see more movies like this one
+
+=== Sample 185 ===
+you 'll feel like you were actually at the concert
+
+=== Sample 186 ===
+the film is a very good example of the classic type of movies from the silent era
+
+=== Sample 187 ===
+but i loved the characters and their development throughout the movie
+
+=== Sample 188 ===
+it 's a movie about the movie business and it 's wonderful
+
+=== Sample 189 ===
+i love the movie
+
+=== Sample 190 ===
+the best parts are when he is getting his revenge and he is doing it in a way that 's so creative
+
+=== Sample 191 ===
+this is a great movie to see with your family and a great movie to see on a cold winter night with a bowl of hot soup and a blanket
+
+=== Sample 192 ===
+the other actors are very good as well especially the two younger ones
+
+=== Sample 193 ===
+the film is in a way a selfdefence against the real and the threatening chaos of the outside world
+
+=== Sample 194 ===
+i liked the characters and the setting
+
+=== Sample 195 ===
+i have to admit i did not understand the plot of the first film and this one is even more confusing
+
+=== Sample 196 ===
+the film is very atmospheric and the photography is outstanding
+
+=== Sample 197 ===
+br br the story is set in post wwii germany when the us and british are still occupying the country
+
+=== Sample 198 ===
+the director is very good and the plot is very well done
+
+=== Sample 199 ===
+the best thing about this movie is that it does n't try to be a classic
+
+=== Sample 200 ===
+br br i 've seen this movie a million times and i still get chills when the scene in the hospital comes around
+Finished.

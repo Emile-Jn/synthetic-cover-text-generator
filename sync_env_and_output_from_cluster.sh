@@ -21,13 +21,12 @@ rsync -avP -e ssh \
   --include='uv.lock' \
   --include='generated_samples' \
   --include='generated_samples/**' \
+  --include='slurm_output' \
+  --include='slurm_output/**' \
+  --include='data' \
+  --include='data/**' \
+  --include='plots' \
+  --include='plots/**' \
   --exclude='*' \
   "$REMOTE:$REMOTE_BASE/" \
   "$LOCAL_BASE/"
-
-# Sync .out files from remote repo root into local slurm_output directory
-rsync -avP -e ssh \
-  --include='*.out' \
-  --exclude='*' \
-  "$REMOTE:$REMOTE_BASE/" \
-  "$LOCAL_BASE/slurm_output/"

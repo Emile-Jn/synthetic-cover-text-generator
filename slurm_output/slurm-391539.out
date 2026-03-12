@@ -1,0 +1,45 @@
+Running on: a-a100-qs-7
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 222, in <module>
+    main()
+    ~~~~^^
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 202, in main
+    model, tokenizer = load_model(
+                       ~~~~~~~~~~^
+        model_dir=model_dir,
+        ^^^^^^^^^^^^^^^^^^^^
+        max_seq_length=args.max_seq_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        load_in_4bit=args.load_in_4bit,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/src/vibe_check.py", line 15, in load_model
+    model, tokenizer = unsloth.FastLanguageModel.from_pretrained(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        model_name=model_dir,
+        ^^^^^^^^^^^^^^^^^^^^^
+        max_seq_length=max_seq_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        load_in_4bit=load_in_4bit,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/models/loader.py", line 281, in from_pretrained
+    model_types = get_transformers_model_type(
+        peft_config if peft_config is not None else model_config
+    )
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth_zoo/hf_utils.py", line 112, in get_transformers_model_type
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Unsloth: No config file found - are you sure the `model_name` is correct?
+If you're using a model on your local device, confirm if the folder location exists.
+If you're using a HuggingFace online model, check if it exists.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Using latest model directory: /home/e12229987/synthetic-cover-text-generator/outputs/20260219_1137_quiet-grass-3
+Finished.

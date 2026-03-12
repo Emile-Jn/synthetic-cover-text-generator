@@ -1,5 +1,5 @@
 # Large data files
-data/
+# data/ # data is relevant and small enough (under 10Mb per file, few files)
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
