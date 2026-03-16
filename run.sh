@@ -7,7 +7,7 @@
 #SBATCH --gres=gpu:1      # request 1 GPU
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --time=01:00:00  # request 1 h of max runtime
+#SBATCH --time=02:00:00  # request 2 h of max runtime
 #SBATCH --output=slurm_output/slurm-%j.out
 
 # always include this, may provide useful information to the admins
@@ -24,3 +24,4 @@ echo "Finished."
 # sbatch run.sh hello_world.py
 # sbatch --partition=GPU-a100 run.sh -m src.vibe_check --prompt ""
 # sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file amanneo/enron-mail-corpus-mini --model-name unsloth/Qwen3.5-4B-Base
+# sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3.5-4B-Base

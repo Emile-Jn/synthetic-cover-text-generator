@@ -17,6 +17,8 @@ import wandb
 from datetime import datetime
 import os
 import argparse
+import time
+from transformers import TrainerCallback
 from transformers.utils import logging
 
 from src.data_loading import resolve_training_dataset
@@ -24,6 +26,29 @@ from src.data_loading import resolve_training_dataset
 # Disable very verbose model loading
 logging.set_verbosity_error()
 logging.disable_progress_bar()
+
+
+class SampleTimingCallback(TrainerCallback):
+    """Approximate seconds per sample, logged at each trainer log event."""
+
+    def __init__(self):
+        self._t0 = time.perf_counter()
+        self._step0 = 0
+
+    def on_log(self, args, state, control, **kwargs):
+        if not state.is_world_process_zero or state.global_step <= self._step0 or wandb.run is None:
+            return
+
+        now = time.perf_counter()
+        dt = now - self._t0
+        dsteps = state.global_step - self._step0
+        samples = dsteps * args.per_device_train_batch_size * args.gradient_accumulation_steps
+
+        wandb.log({"train/avg_seconds_per_sample": dt / samples}, step=state.global_step)
+
+        self._t0 = now
+        self._step0 = state.global_step
+
 
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
               data_file: str = "imdb_reviews.txt",
@@ -95,6 +120,7 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
         dataset_text_field = "text",
         max_seq_length = max_seq_length,
         dataset_num_proc = 4,
+        callbacks=[SampleTimingCallback()],
         args = SFTConfig(
             per_device_train_batch_size = 8,
             gradient_accumulation_steps = 4,
