@@ -141,13 +141,14 @@ def _load_hf_dataset_with_fallback(data_file: str):
         return _load_raw_parquet_dataset(data_file)
 
 
-def resolve_training_dataset(data_file: str, eos_token: str):
+def resolve_training_dataset(data_file: str, eos_token: str, verbose: bool = False):
     """
     Resolve training data from local data/ first, then fallback to Hugging Face datasets.
 
     Args:
         data_file: Local filename under data/ or a HF dataset identifier.
         eos_token: Token to inject at start and end of each example.
+        verbose: Print verbose messages.
 
     Returns:
         A Hugging Face Dataset with a single "text" column.
@@ -173,8 +174,9 @@ def resolve_training_dataset(data_file: str, eos_token: str):
                 dataset = loaded[first_split]
         dataset = _normalize_text_dataset(dataset, data_file, eos_token)
 
-    print("First 5 samples from resolved dataset:")
-    for i, sample in enumerate(dataset["text"][:5], start=1):
-        print(f"{i}. {sample}")
+    if verbose:
+        print("First 5 samples from resolved dataset:")
+        for i, sample in enumerate(dataset["text"][:5], start=1):
+            print(f"{i}. {sample}")
 
     return dataset
