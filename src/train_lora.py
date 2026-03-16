@@ -55,44 +55,50 @@ def resolve_training_dataset(data_file: str, eos_token: str):
     local_path = here(f"data/{data_file}")
     if os.path.isfile(local_path):
         print(f"Using local dataset file: {local_path}")
-        return load_text_lines(local_path, eos_token)
-
-    print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_file}")
-    loaded = load_dataset(data_file)
-
-    if isinstance(loaded, Dataset):
-        dataset = loaded
+        dataset = load_text_lines(local_path, eos_token)
     else:
-        if "train" in loaded:
-            dataset = loaded["train"]
+        print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_file}")
+        loaded = load_dataset(data_file)
+
+        if isinstance(loaded, Dataset):
+            dataset = loaded
         else:
-            first_split = next(iter(loaded.keys()))
-            print(f"No 'train' split found. Using split: {first_split}")
-            dataset = loaded[first_split]
+            if "train" in loaded:
+                dataset = loaded["train"]
+            else:
+                first_split = next(iter(loaded.keys()))
+                print(f"No 'train' split found. Using split: {first_split}")
+                dataset = loaded[first_split]
 
-    text_column = "text" if "text" in dataset.column_names else None
-    if text_column is None:
-        for column in dataset.column_names:
-            values = dataset[column]
-            if any(isinstance(v, str) and v.strip() for v in values[:100]):
-                text_column = column
-                print(f"No 'text' column found. Using string column: {text_column}")
-                break
+        text_column = "text" if "text" in dataset.column_names else None
+        if text_column is None:
+            for column in dataset.column_names:
+                values = dataset[column]
+                if any(isinstance(v, str) and v.strip() for v in values[:100]):
+                    text_column = column
+                    print(f"No 'text' column found. Using string column: {text_column}")
+                    break
 
-    if text_column is None:
-        raise ValueError(
-            f"Could not find a usable text column in dataset '{data_file}'. "
-            f"Available columns: {dataset.column_names}"
-        )
+        if text_column is None:
+            raise ValueError(
+                f"Could not find a usable text column in dataset '{data_file}'. "
+                f"Available columns: {dataset.column_names}"
+            )
 
-    def _format_row(example):
-        text = example[text_column].strip()
-        if eos_token is not None:
-            return {"text": f"{eos_token}{text}{eos_token}"}
-        return {"text": text}
+        def _format_row(example):
+            text = example[text_column].strip()
+            if eos_token is not None:
+                return {"text": f"{eos_token}{text}{eos_token}"}
+            return {"text": text}
 
-    dataset = dataset.filter(lambda x: isinstance(x[text_column], str) and x[text_column].strip())
-    return dataset.map(_format_row, remove_columns=dataset.column_names)
+        dataset = dataset.filter(lambda x: isinstance(x[text_column], str) and x[text_column].strip())
+        dataset = dataset.map(_format_row, remove_columns=dataset.column_names)
+
+    print("First 5 samples from resolved dataset:")
+    for i, sample in enumerate(dataset["text"][:5], start=1):
+        print(f"{i}. {sample}")
+
+    return dataset
 
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
               data_file: str = "imdb_reviews.txt",
