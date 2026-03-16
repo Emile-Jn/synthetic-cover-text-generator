@@ -10,7 +10,8 @@ sbatch --partition=GPU-a100s run.sh -m src.train_lora
 
 import unsloth # Has to be imported before transformers to avoid import conflicts
 import torch
-from datasets import Dataset, load_dataset
+from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
+from huggingface_hub import HfApi
 from trl import SFTTrainer, SFTConfig
 from dotenv import load_dotenv
 from pyprojroot import here
@@ -18,6 +19,11 @@ import wandb
 from datetime import datetime
 import os
 import argparse
+from transformers.utils import logging
+
+# Disable very verbose model loading
+logging.set_verbosity_error()
+logging.disable_progress_bar()
 
 def load_text_lines(file_path, eos_token, n=None):
     """
@@ -41,6 +47,57 @@ def load_text_lines(file_path, eos_token, n=None):
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
 
+def _load_hf_dataset_with_fallback(data_file: str):
+    """Load a HF dataset, then fallback to raw parquet files if schema casting fails."""
+    try:
+        return load_dataset(data_file)
+    except Exception as error:
+        error_text = str(error)
+        is_cast_error = "CastError" in error.__class__.__name__ or "Couldn't cast" in error_text
+        if not is_cast_error:
+            raise
+
+        print(
+            "Encountered a dataset schema cast error while loading "
+            f"'{data_file}'. Falling back to direct parquet loading."
+        )
+        repo_files = HfApi().list_repo_files(repo_id=data_file, repo_type="dataset")
+        parquet_files = [
+            f"hf://datasets/{data_file}/{path}"
+            for path in repo_files
+            if path.endswith(".parquet")
+        ]
+        if not parquet_files:
+            raise RuntimeError(
+                f"Fallback failed: no parquet files were found for dataset '{data_file}'."
+            ) from error
+
+        split_datasets = {}
+        for parquet_file in parquet_files:
+            split_name = _infer_split_name(parquet_file)
+            split_datasets.setdefault(split_name, []).append(Dataset.from_parquet(parquet_file))
+
+        normalized_splits = {
+            split_name: (
+                split_parts[0]
+                if len(split_parts) == 1
+                else concatenate_datasets(split_parts)
+            )
+            for split_name, split_parts in split_datasets.items()
+        }
+
+        if len(normalized_splits) == 1:
+            return next(iter(normalized_splits.values()))
+        return DatasetDict(normalized_splits)
+
+def _infer_split_name(parquet_path: str) -> str:
+    """Infer an HF split name from a parquet path when possible."""
+    file_name = os.path.basename(parquet_path).lower()
+    for split_name in ("train", "validation", "test"):
+        if f"{split_name}-" in file_name or f"/{split_name}/" in parquet_path.lower():
+            return split_name
+    return "train"
+
 def resolve_training_dataset(data_file: str, eos_token: str):
     """
     Resolve training data from local data/ first, then fallback to Hugging Face datasets.
@@ -58,7 +115,7 @@ def resolve_training_dataset(data_file: str, eos_token: str):
         dataset = load_text_lines(local_path, eos_token)
     else:
         print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_file}")
-        loaded = load_dataset(data_file)
+        loaded = _load_hf_dataset_with_fallback(data_file)
 
         if isinstance(loaded, Dataset):
             dataset = loaded
@@ -72,9 +129,11 @@ def resolve_training_dataset(data_file: str, eos_token: str):
 
         text_column = "text" if "text" in dataset.column_names else None
         if text_column is None:
+            probe_size = min(100, len(dataset))
+            probe = dataset.select(range(probe_size)) if probe_size > 0 else None
             for column in dataset.column_names:
-                values = dataset[column]
-                if any(isinstance(v, str) and v.strip() for v in values[:100]):
+                values = probe[column] if probe is not None else []
+                if any(isinstance(v, str) and v.strip() for v in values):
                     text_column = column
                     print(f"No 'text' column found. Using string column: {text_column}")
                     break
