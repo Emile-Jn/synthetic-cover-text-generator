@@ -10,7 +10,7 @@ sbatch --partition=GPU-a100s run.sh -m src.train_lora
 
 import unsloth # Has to be imported before transformers to avoid import conflicts
 import torch
-from datasets import Dataset
+from datasets import Dataset, load_dataset
 from trl import SFTTrainer, SFTConfig
 from dotenv import load_dotenv
 from pyprojroot import here
@@ -40,6 +40,59 @@ def load_text_lines(file_path, eos_token, n=None):
         if n is not None:
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
+
+def resolve_training_dataset(data_file: str, eos_token: str):
+    """
+    Resolve training data from local data/ first, then fallback to Hugging Face datasets.
+
+    Args:
+        data_file: Local filename under data/ or a HF dataset identifier.
+        eos_token: Token to inject at start and end of each example.
+
+    Returns:
+        A Hugging Face Dataset with a single "text" column.
+    """
+    local_path = here(f"data/{data_file}")
+    if os.path.isfile(local_path):
+        print(f"Using local dataset file: {local_path}")
+        return load_text_lines(local_path, eos_token)
+
+    print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_file}")
+    loaded = load_dataset(data_file)
+
+    if isinstance(loaded, Dataset):
+        dataset = loaded
+    else:
+        if "train" in loaded:
+            dataset = loaded["train"]
+        else:
+            first_split = next(iter(loaded.keys()))
+            print(f"No 'train' split found. Using split: {first_split}")
+            dataset = loaded[first_split]
+
+    text_column = "text" if "text" in dataset.column_names else None
+    if text_column is None:
+        for column in dataset.column_names:
+            values = dataset[column]
+            if any(isinstance(v, str) and v.strip() for v in values[:100]):
+                text_column = column
+                print(f"No 'text' column found. Using string column: {text_column}")
+                break
+
+    if text_column is None:
+        raise ValueError(
+            f"Could not find a usable text column in dataset '{data_file}'. "
+            f"Available columns: {dataset.column_names}"
+        )
+
+    def _format_row(example):
+        text = example[text_column].strip()
+        if eos_token is not None:
+            return {"text": f"{eos_token}{text}{eos_token}"}
+        return {"text": text}
+
+    dataset = dataset.filter(lambda x: isinstance(x[text_column], str) and x[text_column].strip())
+    return dataset.map(_format_row, remove_columns=dataset.column_names)
 
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
               data_file: str = "imdb_reviews.txt",
@@ -91,7 +144,7 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
     )
 
     # 4. Load your data
-    dataset = load_text_lines(here(f"data/{data_file}"), tokenizer.eos_token)
+    dataset = resolve_training_dataset(data_file, tokenizer.eos_token)
 
     # 5. Set up Trainer
     trainer = SFTTrainer(
@@ -145,7 +198,10 @@ if __name__ == "__main__":
         "--data-file",
         type=str,
         default="imdb_reviews.txt",
-        help="Filename inside data/ to use for training (default: imdb_reviews.txt)",
+        help=(
+            "Local filename inside data/ (preferred) or a Hugging Face dataset identifier "
+            "if no local file exists (default: imdb_reviews.txt)"
+        ),
     )
     parser.add_argument(
         "--max-seq-length",
