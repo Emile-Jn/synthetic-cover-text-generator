@@ -25,6 +25,10 @@ from transformers.utils import logging
 logging.set_verbosity_error()
 logging.disable_progress_bar()
 
+PARQUET_FALLBACK_DATASETS = {
+    "amanneo/enron-mail-corpus-mini",
+}
+
 def load_text_lines(file_path, eos_token, n=None):
     """
     Make a Hugging Face Dataset from a text file where each line is a separate example.
@@ -47,8 +51,77 @@ def load_text_lines(file_path, eos_token, n=None):
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
 
+def _find_text_column(dataset: Dataset, data_file: str) -> str:
+    """Return the preferred text-bearing column for a dataset."""
+    if "text" in dataset.column_names:
+        return "text"
+
+    probe_size = min(100, len(dataset))
+    probe = dataset.select(range(probe_size)) if probe_size > 0 else None
+    for column in dataset.column_names:
+        values = probe[column] if probe is not None else []
+        if any(isinstance(v, str) and v.strip() for v in values):
+            print(f"No 'text' column found in '{data_file}'. Using string column: {column}")
+            return column
+
+    raise ValueError(
+        f"Could not find a usable text column in dataset '{data_file}'. "
+        f"Available columns: {dataset.column_names}"
+    )
+
+def _normalize_text_dataset(dataset: Dataset, data_file: str, eos_token: str) -> Dataset:
+    """Project a dataset down to a cleaned single `text` column."""
+    text_column = _find_text_column(dataset, data_file)
+
+    def _has_usable_text(example):
+        return isinstance(example[text_column], str) and example[text_column].strip()
+
+    def _format_row(example):
+        text = example[text_column].strip()
+        if eos_token is not None:
+            return {"text": f"{eos_token}{text}{eos_token}"}
+        return {"text": text}
+
+    dataset = dataset.filter(_has_usable_text)
+    return dataset.map(_format_row, remove_columns=dataset.column_names)
+
+def _load_raw_parquet_dataset(data_file: str):
+    """Load a dataset directly from its parquet files, bypassing HF schema casting."""
+    print(f"Loading '{data_file}' directly from parquet files.")
+    repo_files = HfApi().list_repo_files(repo_id=data_file, repo_type="dataset")
+    parquet_files = [
+        f"hf://datasets/{data_file}/{path}"
+        for path in repo_files
+        if path.endswith(".parquet")
+    ]
+    if not parquet_files:
+        raise RuntimeError(
+            f"Fallback failed: no parquet files were found for dataset '{data_file}'."
+        )
+
+    split_datasets = {}
+    for parquet_file in parquet_files:
+        split_name = _infer_split_name(parquet_file)
+        split_datasets.setdefault(split_name, []).append(Dataset.from_parquet(parquet_file))
+
+    normalized_splits = {
+        split_name: (
+            split_parts[0]
+            if len(split_parts) == 1
+            else concatenate_datasets(split_parts)
+        )
+        for split_name, split_parts in split_datasets.items()
+    }
+
+    if len(normalized_splits) == 1:
+        return next(iter(normalized_splits.values()))
+    return DatasetDict(normalized_splits)
+
 def _load_hf_dataset_with_fallback(data_file: str):
     """Load a HF dataset, then fallback to raw parquet files if schema casting fails."""
+    if data_file in PARQUET_FALLBACK_DATASETS:
+        return _load_raw_parquet_dataset(data_file)
+
     try:
         return load_dataset(data_file)
     except Exception as error:
@@ -61,34 +134,7 @@ def _load_hf_dataset_with_fallback(data_file: str):
             "Encountered a dataset schema cast error while loading "
             f"'{data_file}'. Falling back to direct parquet loading."
         )
-        repo_files = HfApi().list_repo_files(repo_id=data_file, repo_type="dataset")
-        parquet_files = [
-            f"hf://datasets/{data_file}/{path}"
-            for path in repo_files
-            if path.endswith(".parquet")
-        ]
-        if not parquet_files:
-            raise RuntimeError(
-                f"Fallback failed: no parquet files were found for dataset '{data_file}'."
-            ) from error
-
-        split_datasets = {}
-        for parquet_file in parquet_files:
-            split_name = _infer_split_name(parquet_file)
-            split_datasets.setdefault(split_name, []).append(Dataset.from_parquet(parquet_file))
-
-        normalized_splits = {
-            split_name: (
-                split_parts[0]
-                if len(split_parts) == 1
-                else concatenate_datasets(split_parts)
-            )
-            for split_name, split_parts in split_datasets.items()
-        }
-
-        if len(normalized_splits) == 1:
-            return next(iter(normalized_splits.values()))
-        return DatasetDict(normalized_splits)
+        return _load_raw_parquet_dataset(data_file)
 
 def _infer_split_name(parquet_path: str) -> str:
     """Infer an HF split name from a parquet path when possible."""
@@ -126,32 +172,7 @@ def resolve_training_dataset(data_file: str, eos_token: str):
                 first_split = next(iter(loaded.keys()))
                 print(f"No 'train' split found. Using split: {first_split}")
                 dataset = loaded[first_split]
-
-        text_column = "text" if "text" in dataset.column_names else None
-        if text_column is None:
-            probe_size = min(100, len(dataset))
-            probe = dataset.select(range(probe_size)) if probe_size > 0 else None
-            for column in dataset.column_names:
-                values = probe[column] if probe is not None else []
-                if any(isinstance(v, str) and v.strip() for v in values):
-                    text_column = column
-                    print(f"No 'text' column found. Using string column: {text_column}")
-                    break
-
-        if text_column is None:
-            raise ValueError(
-                f"Could not find a usable text column in dataset '{data_file}'. "
-                f"Available columns: {dataset.column_names}"
-            )
-
-        def _format_row(example):
-            text = example[text_column].strip()
-            if eos_token is not None:
-                return {"text": f"{eos_token}{text}{eos_token}"}
-            return {"text": text}
-
-        dataset = dataset.filter(lambda x: isinstance(x[text_column], str) and x[text_column].strip())
-        dataset = dataset.map(_format_row, remove_columns=dataset.column_names)
+        dataset = _normalize_text_dataset(dataset, data_file, eos_token)
 
     print("First 5 samples from resolved dataset:")
     for i, sample in enumerate(dataset["text"][:5], start=1):
