@@ -27,9 +27,13 @@ logging.disable_progress_bar()
 
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
               data_file: str = "imdb_reviews.txt",
-              max_seq_length: int = 512):
+              max_seq_length: int = 512,
+              n: int | None = 10000):
     # load .env from repo root
     load_dotenv(dotenv_path=here(".env"))
+
+    if n is not None and n < 1:
+        raise ValueError("n must be >= 1 when provided")
 
     # Initialize wandb
     run = wandb.init(
@@ -37,6 +41,7 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
         config={
             "model_name": model_name,
             "max_seq_length": max_seq_length,
+            "n": n,
             "lora_r": 64,
             "lora_alpha": 64,
             "learning_rate": 2e-4,
@@ -74,8 +79,13 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
         random_state = 3407,
     )
 
-    # 4. Load your data
+    # 4. Load the data
     dataset = resolve_training_dataset(data_file, tokenizer.eos_token)
+    if n is not None:
+        original_size = len(dataset)
+        capped_size = min(n, original_size)
+        dataset = dataset.select(range(capped_size))
+        print(f"Using first {capped_size} samples out of {original_size} total.")
 
     # 5. Set up Trainer
     trainer = SFTTrainer(
@@ -140,9 +150,16 @@ if __name__ == "__main__":
         default=512,
         help="Maximum token sequence length (default: 512)",
     )
+    parser.add_argument(
+        "--n",
+        type=int,
+        default=10000,
+        help="If set, use only the first n samples from the resolved dataset (default: 10000).",
+    )
     args = parser.parse_args()
     fine_tune(
         model_name=args.model_name,
         data_file=args.data_file,
         max_seq_length=args.max_seq_length,
+        n=args.n,
     )

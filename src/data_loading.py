@@ -9,6 +9,15 @@ PARQUET_FALLBACK_DATASETS = {
     "amanneo/enron-mail-corpus-mini",
 }
 
+def clean_text(text: str) -> str:
+    """
+    Remove artefacts that are found for example in the stanfordnlp/imdb dataset:
+    - HTML line breaks: <br /> and <br>
+    - Multiple whitespace characters in a row, replaced with a single space.
+    """
+    text = text.replace("<br />", " ").replace("<br>", " ")
+    text = " ".join(text.split())
+    return text
 
 def load_text_lines(file_path, eos_token, n=None):
     """
@@ -25,9 +34,9 @@ def load_text_lines(file_path, eos_token, n=None):
     with open(file_path, "r", encoding="utf-8") as f:
         if eos_token is not None:
             # Inject the anchor tokens directly into the raw string
-            lines = [f"{eos_token}{line.strip()}{eos_token}" for line in f if line.strip()]
+            lines = [f"{eos_token}{clean_text(line)}{eos_token}" for line in f if line.strip()]
         else:
-            lines = [line.strip() for line in f if line.strip()]
+            lines = [clean_text(line) for line in f if line.strip()]
         if n is not None:
             lines = lines[:n]
     return Dataset.from_dict({"text": lines})
@@ -57,10 +66,11 @@ def _normalize_text_dataset(dataset: Dataset, data_file: str, eos_token: str) ->
     text_column = _find_text_column(dataset, data_file)
 
     def _has_usable_text(example):
-        return isinstance(example[text_column], str) and example[text_column].strip()
+        cleaned = clean_text(example[text_column]) if isinstance(example[text_column], str) else ""
+        return bool(cleaned.strip())
 
     def _format_row(example):
-        text = example[text_column].strip()
+        text = clean_text(example[text_column]).strip()
         if eos_token is not None:
             return {"text": f"{eos_token}{text}{eos_token}"}
         return {"text": text}
@@ -143,9 +153,11 @@ def resolve_training_dataset(data_file: str, eos_token: str):
         A Hugging Face Dataset with a single "text" column.
     """
     local_path = here(f"data/{data_file}")
+    # If data_file is the name of a local file, load it directly as text lines.
     if os.path.isfile(local_path):
         print(f"Using local dataset file: {local_path}")
         dataset = load_text_lines(local_path, eos_token)
+    # Otherwise, try to load it as a Hugging Face dataset (with parquet fallback if needed).
     else:
         print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_file}")
         loaded = _load_hf_dataset_with_fallback(data_file)
