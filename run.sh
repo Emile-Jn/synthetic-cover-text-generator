@@ -27,3 +27,5 @@ echo "Finished."
 # sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3.5-4B-Base
 # sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3.5-4B-Base --n 64
 # sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3-4B-Base --n 64
+
+# sbatch --partition=GPU-a100 run.sh -m src.generate_synthetic_cover_text --model-path 20260316_2119_dauntless-bee-13 --num-samples 10

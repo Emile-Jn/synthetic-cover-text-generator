@@ -56,21 +56,21 @@ def resolve_prompt_text(prompt: str, tokenizer) -> str:
 
 def latest_model_path():
     """
-    Get the path of the latest saved fine-tuned model in the outputs/ directory, based
+    Get the path of the latest saved fine-tuned model in the fine_tuned_models/ directory, based
     on the timestamp in the folder name. Folder names are formatted like 20260219_1137_quiet-grass-3
     Returns:
         Path to the latest model directory, or None if no valid directories are found.
     """
     root = Path(here())
-    outputs_dir = root / "outputs"
-    if not outputs_dir.exists() or not outputs_dir.is_dir():
+    models_dir = root / "fine_tuned_models"
+    if not models_dir.exists() or not models_dir.is_dir():
         return None
 
     time_prefix_re = re.compile(r"^(\d{8}_\d{4})")
     latest_dir: Optional[Path] = None
     latest_dt: Optional[datetime] = None
 
-    for entry in outputs_dir.iterdir():
+    for entry in models_dir.iterdir():
         if not entry.is_dir():
             continue
         m = time_prefix_re.match(entry.name)
@@ -217,13 +217,13 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    # If no model dir is provided, try to find the latest saved model under outputs/
-    model_dir = args.model_path
+    # If no model dir is provided, try to find the latest saved model under fine_tuned_models/
+    model_dir = Path("fine_tuned_models") / args.model_path
     if not model_dir:
         model_dir = latest_model_path()
         if not model_dir:
             raise FileNotFoundError(
-                "No model directory provided and no timestamped directories found under outputs/."
+                "No model directory provided and no timestamped directories found under fine_tuned_models/."
             )
         print(f"Using latest model directory: {model_dir}")
 
