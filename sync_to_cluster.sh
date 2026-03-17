@@ -12,6 +12,9 @@ REMOTE_DIR=""
 # Synchronize files on cluster from local device using rsync
 rsync -avP -e ssh \
   --exclude-from='.rsyncignore' \
+  --exclude='generated_samples/' \
+  --exclude='generated_samples/**' \
   --exclude='slurm_output/' \
+  --exclude='slurm_output/**' \
   "$LOCAL_DIR" \
   "$REMOTE:$REMOTE_DIR"

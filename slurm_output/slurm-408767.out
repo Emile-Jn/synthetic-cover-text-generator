@@ -1,0 +1,7 @@
+Running on: a-a100-q-5
+usage: train_lora.py [-h] [--model-name MODEL_NAME] [--data-file DATA_FILE]
+                     [--max-seq-length MAX_SEQ_LENGTH]
+train_lora.py: error: unrecognized arguments: --n 64
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

@@ -7,6 +7,7 @@ sbatch --partition=GPU-a100s run.sh -m src.generate_synthetic_cover_text --promp
 """
 
 import argparse
+import os
 import time
 from datetime import datetime
 from pathlib import Path
@@ -18,12 +19,13 @@ from pyprojroot import here
 import unsloth
 
 
-def load_model(model_dir: str, max_seq_length: int = 512, load_in_4bit: bool = False):
+def load_model(model_dir: str | os.PathLike[str], max_seq_length: int = 512, load_in_4bit: bool = False):
     """Load the merged LoRA model produced by train_lora.py."""
     # A100 has native BF16 support – faster than FP16 and no loss scaling needed.
     dtype = torch.bfloat16
+    model_name = os.fspath(model_dir)
     model, tokenizer = unsloth.FastLanguageModel.from_pretrained(
-        model_name=model_dir,
+        model_name=model_name,
         max_seq_length=max_seq_length,
         load_in_4bit=load_in_4bit,
         dtype=dtype,
@@ -54,7 +56,7 @@ def resolve_prompt_text(prompt: str, tokenizer) -> str:
         return tokenizer.decode([tokenizer.bos_token_id])
     raise ValueError("Tokenizer is missing a BOS token; provide a prompt instead.")
 
-def latest_model_path():
+def latest_model_path() -> Optional[Path]:
     """
     Get the path of the latest saved fine-tuned model in the fine_tuned_models/ directory, based
     on the timestamp in the folder name. Folder names are formatted like 20260219_1137_quiet-grass-3
@@ -85,7 +87,7 @@ def latest_model_path():
             latest_dt = dt
             latest_dir = entry
 
-    return str(latest_dir) if latest_dir is not None else None
+    return latest_dir / "final_merged_model"
 
 
 def generate_samples(
@@ -218,8 +220,11 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     # If no model dir is provided, try to find the latest saved model under fine_tuned_models/
-    model_dir = Path("fine_tuned_models") / args.model_path
-    if not model_dir:
+    if args.model_path:
+        model_dir = Path(args.model_path)
+        if not model_dir.is_absolute():
+            model_dir = Path(here()) / "fine_tuned_models" / model_dir / "final_merged_model"
+    else:
         model_dir = latest_model_path()
         if not model_dir:
             raise FileNotFoundError(
@@ -227,6 +232,7 @@ def main():
             )
         print(f"Using latest model directory: {model_dir}")
 
+    print(f'Using model: {model_dir}')
     model, tokenizer = load_model(
         model_dir=model_dir,
         max_seq_length=args.max_seq_length,

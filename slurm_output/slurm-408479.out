@@ -1,0 +1,124 @@
+Running on: a-a100-q-5
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+wandb: Currently logged in as: emilej to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run mlow50ao
+wandb: Tracking run with wandb version 0.25.1
+wandb: Run data is saved locally in /home/e12229987/synthetic-cover-text-generator/wandb/run-20260316_124012-mlow50ao
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run clean-fire-7
+wandb: ⭐️ View project at https://wandb.ai/emilej/entropy-steering-steganography
+wandb: 🚀 View run at https://wandb.ai/emilej/entropy-steering-steganography/runs/mlow50ao
+wandb: Detected [huggingface_hub.inference] in use.
+wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+==((====))==  Unsloth 2026.3.4: Fast Qwen3_5 patching. Transformers: 5.2.0.
+   \\   /|    NVIDIA A100-SXM4-80GB. Num GPUs = 1. Max memory: 79.254 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.35. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Unsloth: QLoRA and full finetuning all not selected. Switching to 16bit LoRA.
+Unsloth: Making `model.base_model.model.model.language_model` require gradients
+Local file not found at /home/e12229987/synthetic-cover-text-generator/data/amanneo/enron-mail-corpus-mini. Trying Hugging Face dataset: amanneo/enron-mail-corpus-mini
+Generating train split:   0%|          | 0/36000 [00:00<?, ? examples/s]Failed to read file '/home/e12229987/.cache/huggingface/hub/datasets--amanneo--enron-mail-corpus-mini/snapshots/65a43c364766f0af2d314f6cce3bb1980a1913a4/data/train-00000-of-00001-014f331c4b4820b4.parquet' with error CastError: Couldn't cast
+id: double
+email_type: string
+text: string
+mail_length: int64
+to
+{'text': Value('string'), 'mail_length': Value('int64')}
+because column names don't match
+[datasets.packaged_modules.parquet.parquet|ERROR]Failed to read file '/home/e12229987/.cache/huggingface/hub/datasets--amanneo--enron-mail-corpus-mini/snapshots/65a43c364766f0af2d314f6cce3bb1980a1913a4/data/train-00000-of-00001-014f331c4b4820b4.parquet' with error CastError: Couldn't cast
+id: double
+email_type: string
+text: string
+mail_length: int64
+to
+{'text': Value('string'), 'mail_length': Value('int64')}
+because column names don't match
+Generating train split:   0%|          | 0/36000 [00:00<?, ? examples/s]
+Traceback (most recent call last):
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/builder.py", line 1818, in _prepare_split_single
+    for _, table in generator:
+                    ^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/packaged_modules/parquet/parquet.py", line 181, in _generate_tables
+    yield f"{file_idx}_{batch_idx}", self._cast_table(pa_table)
+                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/packaged_modules/parquet/parquet.py", line 147, in _cast_table
+    pa_table = table_cast(pa_table, self.info.features.arrow_schema)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/table.py", line 2272, in table_cast
+    return cast_table_to_schema(table, schema)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/table.py", line 2218, in cast_table_to_schema
+    raise CastError(
+    ...<3 lines>...
+    )
+datasets.table.CastError: Couldn't cast
+id: double
+email_type: string
+text: string
+mail_length: int64
+to
+{'text': Value('string'), 'mail_length': Value('int64')}
+because column names don't match
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 278, in <module>
+    fine_tune(
+    ~~~~~~~~~^
+        model_name=args.model_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        data_file=args.data_file,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+        max_seq_length=args.max_seq_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 212, in fine_tune
+    dataset = resolve_training_dataset(data_file, tokenizer.eos_token)
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 118, in resolve_training_dataset
+    loaded = _load_hf_dataset_with_fallback(data_file)
+  File "/home/e12229987/synthetic-cover-text-generator/src/train_lora.py", line 53, in _load_hf_dataset_with_fallback
+    return load_dataset(data_file)
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/load.py", line 1417, in load_dataset
+    builder_instance.download_and_prepare(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        download_config=download_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        storage_options=storage_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/builder.py", line 897, in download_and_prepare
+    self._download_and_prepare(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dl_manager=dl_manager,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        **download_and_prepare_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/builder.py", line 973, in _download_and_prepare
+    self._prepare_split(split_generator, **prepare_split_kwargs)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/builder.py", line 1705, in _prepare_split
+    for job_id, done, content in self._prepare_split_single(
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        gen_kwargs=gen_kwargs, job_id=job_id, **_prepare_split_args
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+  File "/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/datasets/builder.py", line 1861, in _prepare_split_single
+    raise DatasetGenerationError("An error occurred while generating the dataset") from e
+datasets.exceptions.DatasetGenerationError: An error occurred while generating the dataset
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mclean-fire-7[0m at: [34mhttps://wandb.ai/emilej/entropy-steering-steganography/runs/mlow50ao[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20260316_124012-mlow50ao/logs[0m
+Finished.

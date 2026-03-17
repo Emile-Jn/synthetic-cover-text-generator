@@ -3,7 +3,7 @@ count the number of words (separated by whitespace) in each line of a text file 
 """
 
 import numpy as np
-
+import argparse
 
 def count_lengths(file_paths: list[str]) -> list[int]:
     word_counts = []
@@ -14,7 +14,7 @@ def count_lengths(file_paths: list[str]) -> list[int]:
                 word_counts.append(word_count)
     return word_counts
 
-def analysis(word_counts: list[int]):
+def sample_length_analysis(word_counts: list[int]):
     """
     Provide statistics about the distribution of word counts, such as mean, median, standard deviation, and percentiles.
     Args:
@@ -58,15 +58,36 @@ def pretty_print(stats_dict: dict):
         else:
             print(f"{key.capitalize()}: {value:.2f}")
 
-def main():
+def check_file(file_paths: list[str]):
+    """
+    For each file, count lengths, do analysis, print results
+    Args:
+        file_paths: a list of file paths
+
+    Returns:
+        nothing, prints results
+
+    """
+    for file_path in file_paths:
+        word_counts = count_lengths([file_path])
+        print(f"\nStats for {file_path}:\n")
+        stats_dict = sample_length_analysis(word_counts)
+        pretty_print(stats_dict)
+
+def main_1():
     word_counts_original = count_lengths(["data/imdb_reviews.txt"])
-    stats_dict_original = analysis(word_counts_original)
+    stats_dict_original = sample_length_analysis(word_counts_original)
     print("Stats of the original dataset: \n")
     pretty_print(stats_dict_original)
     word_counts_synthetic = count_lengths(["generated_samples/samples_2.txt"])
-    stats_dict_synthetic = analysis(word_counts_synthetic)
+    stats_dict_synthetic = sample_length_analysis(word_counts_synthetic)
     print("\nStats of the synthetic dataset: \n")
     pretty_print(stats_dict_synthetic)
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(
+        description="Count words per line and report distribution statistics for one or more text files."
+    )
+    parser.add_argument("file_paths", nargs="+", help="One or more input text files.")
+    args = parser.parse_args()
+    check_file(args.file_paths)
