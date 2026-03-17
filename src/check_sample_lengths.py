@@ -38,6 +38,7 @@ def sample_length_analysis(word_counts: list[int]):
         },
         "min": np.min(word_counts),
         "max": np.max(word_counts),
+        "num_samples": len(word_counts),
     }
     return stats_dict
 

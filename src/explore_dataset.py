@@ -5,15 +5,15 @@ to check if the samples are appropriate.
 
 import argparse
 import random
-
 from transformers import AutoTokenizer
 from datasets import load_dataset, Dataset, DatasetDict
 
-from src.data_loading import resolve_training_dataset
+from src.data_loading import resolve_training_dataset, subset, SortOption
 from src.check_sample_lengths import sample_length_analysis, pretty_print
 
 DEFAULT_MODEL_NAME = "unsloth/Qwen3-8B"
 ENRON_MINI_DATASET = "amanneo/enron-mail-corpus-mini"
+
 
 
 def load_enron_mini(model_name: str = DEFAULT_MODEL_NAME):
@@ -75,11 +75,22 @@ def count_words(dataset: Dataset | DatasetDict) -> list[int]:
         word_counts.append(count)
     return word_counts
 
-def main(dataset_name: str):
-    ds = load_dataset(dataset_name)
-    word_counts = count_words(ds)
-    stats_dict = sample_length_analysis(word_counts)
-    pretty_print(stats_dict)
+def main(dataset_name: str, n: int | None = None, sort: SortOption = None):
+    """
+
+    Args:
+        dataset_name: the name of the dataset to analyze on HuggingFace.
+        n: the number of samples to take from the dataset for analysis (default: None, meaning use the whole dataset)
+        sort: whether to sort the dataset before taking n samples (ASC or DESC)
+
+    Returns:
+        nothing, prints stats about sample lengths.
+    """
+    ds = load_dataset(dataset_name) # load the dataset from HuggingFace
+    analysis_ds = subset(ds, n=n, sort=sort) # take a subset of n samples from the whole dataset
+    word_counts = count_words(analysis_ds) # Count the number of words in each sample
+    stats_dict = sample_length_analysis(word_counts) # Calculate representative statistics
+    pretty_print(stats_dict) # Print the stats
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Load a dataset and print stats about sample lengths.")
@@ -89,5 +100,25 @@ if __name__ == "__main__":
         default="stanfordnlp/imdb",
         help=f"The name of the dataset to load and analyze (default: stanfordnlp/imdb)",
     )
+    parser.add_argument(
+        "--n",
+        type=int,
+        default=None,
+        help="Optional number of samples to analyze after optional sorting.",
+    )
+    parser.add_argument(
+        "--sort",
+        type=str,
+        choices=["asc", "desc"],
+        default=None,
+        help="Optional sort order by sample length (word count): asc or desc.",
+    )
     args = parser.parse_args()
-    main(args.dataset_name)
+
+    sort_option = None
+    if args.sort == "asc":
+        sort_option = SortOption.ASC
+    elif args.sort == "desc":
+        sort_option = SortOption.DESC
+
+    main(args.dataset_name, n=args.n, sort=sort_option)

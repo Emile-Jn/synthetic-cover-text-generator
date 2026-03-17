@@ -1,0 +1,22 @@
+Running on: a-a100-o-2
+Skipping import of cpp extensions due to incompatible torch version 2.10.0+cu128 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/torchao/quantization/quant_api.py:2525: SyntaxWarning: invalid escape sequence '\.'
+  * regex for parameter names, must start with `re:`, e.g. `re:language\.layers\..+\.q_proj.weight`.
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Using model: /home/e12229987/synthetic-cover-text-generator/fine_tuned_models/20260316_2119_dauntless-bee-13/final_merged_model
+==((====))==  Unsloth 2025.10.8: Fast Qwen3 patching. Transformers: 4.56.2.
+   \\   /|    NVIDIA A100-SXM4-80GB. Num GPUs = 1. Max memory: 79.254 GB. Platform: Linux.
+O^O/ \_/ \    Torch: 2.10.0+cu128. CUDA: 8.0. CUDA Toolkit: 12.8. Triton: 3.6.0
+\        /    Bfloat16 = TRUE. FA [Xformers = 0.0.34. FA2 = False]
+ "-____-"     Free license: http://github.com/unslothai/unsloth
+Unsloth: Fast downloading is enabled - ignore downloading bars which are red colored!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:04<00:04,  4.55s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.61s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:07<00:00,  3.75s/it]
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/kernels/utils.py:743: UserWarning: An output with one or more elements was resized since it had shape [1, 8, 2560], which does not match the required output shape [8, 1, 2560]. This behavior is deprecated, and in a future PyTorch release outputs will not be resized unless they have zero elements. You can explicitly reuse an out tensor t by resizing it, inplace, to zero elements with t.resize_(0). (Triggered internally at /pytorch/aten/src/ATen/native/Resize.cpp:31.)
+  out = torch_matmul(X, W.t(), out = out)
+/home/e12229987/synthetic-cover-text-generator/.venv/lib/python3.13/site-packages/unsloth/kernels/utils.py:743: UserWarning: An output with one or more elements was resized since it had shape [1, 2, 2560], which does not match the required output shape [2, 1, 2560]. This behavior is deprecated, and in a future PyTorch release outputs will not be resized unless they have zero elements. You can explicitly reuse an out tensor t by resizing it, inplace, to zero elements with t.resize_(0). (Triggered internally at /pytorch/aten/src/ATen/native/Resize.cpp:31.)
+  out = torch_matmul(X, W.t(), out = out)
+Using EOS token as prompt.
+
+Done. Generated 10 samples in 34.3s (3.43s/sample). Saved to /home/e12229987/synthetic-cover-text-generator/generated_samples/samples_5.txt
+Finished.

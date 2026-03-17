@@ -1,13 +1,22 @@
+"""
+Script for loading data either from local files or from Hugging Face datasets, for
+training LLMs.
+"""
 import os
 
 from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
 from huggingface_hub import HfApi
 from pyprojroot import here
-
+from enum import Enum, auto
 
 PARQUET_FALLBACK_DATASETS = {
     "amanneo/enron-mail-corpus-mini",
 }
+
+class SortOption(Enum):
+    ASC = auto() # Sort by ascending order
+    DESC = auto() # Sort by descending order
+
 
 def clean_text(text: str) -> str:
     """
@@ -180,3 +189,48 @@ def resolve_training_dataset(data_file: str, eos_token: str, verbose: bool = Fal
             print(f"{i}. {sample}")
 
     return dataset
+
+def subset(ds: DatasetDict, n: int = None, sort: SortOption = None):
+    """
+    Take a subset from a text dataset
+    Args:
+        ds: a dataset already loaded from Hugging Face.
+        n: the number of samples to take from the dataset for analysis (default: None, meaning use the whole dataset)
+        sort: whether to sort the dataset before taking n samples (ASC or DESC)
+
+    Returns:
+        a subset of the input dataset according to the specified parameters.
+    """
+    # Resolve the split that this script analyzes.
+    if isinstance(ds, DatasetDict):
+        if "unsupervised" in ds:
+            analysis_ds = ds["unsupervised"]
+        elif "train" in ds:
+            analysis_ds = ds["train"]
+        else:
+            raise KeyError("Expected 'unsupervised' or 'train' split in dataset.")
+    else:
+        analysis_ds = ds
+
+    if n is not None:
+        if n <= 0:
+            raise ValueError("n must be a positive integer.")
+
+        if sort is not None:
+            if sort == SortOption.ASC:
+                analysis_ds = analysis_ds.map(
+                    lambda row: {"_word_count": len(row["text"].split())}
+                )
+                analysis_ds = analysis_ds.sort("_word_count")
+            elif sort == SortOption.DESC:
+                analysis_ds = analysis_ds.map(
+                    lambda row: {"_word_count": len(row["text"].split())}
+                )
+                analysis_ds = analysis_ds.sort("_word_count", reverse=True)
+            else:
+                raise ValueError("Sort must be ASC or DESC")
+
+            if "_word_count" in analysis_ds.column_names:
+                analysis_ds = analysis_ds.remove_columns("_word_count")
+
+    return analysis_ds.select(range(min(n, len(analysis_ds))))

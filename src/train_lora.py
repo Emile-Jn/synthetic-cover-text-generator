@@ -51,7 +51,7 @@ class SampleTimingCallback(TrainerCallback):
 
 
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
-              data_file: str = "imdb_reviews.txt",
+              data_path: str = "imdb_reviews.txt",
               max_seq_length: int = 512,
               n: int | None = 10000,
               verbose: bool = False):
@@ -59,7 +59,7 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
     Fine-tune a language model using LoRA adapters on a specified text dataset.
     Args:
         model_name: the exact HuggingFace model name or path to use as the base for fine-tuning (default: "unsloth/Qwen3-8B").
-        data_file: either the name of a local text file inside the data/ directory or a Hugging Face dataset identifier to load the training data from (default: "imdb_reviews.txt").
+        data_path: either the name of a local text file inside the data/ directory or a Hugging Face dataset identifier to load the training data from (default: "imdb_reviews.txt").
         max_seq_length: the maximum token sequence length to use when loading the model and preparing the dataset (default: 512).
         n: only use the first n samples from the dataset for training. If None, use the entire dataset (default: 10000).
         verbose: whether to print additional information during dataset loading and preparation (default: False).
@@ -118,7 +118,7 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
     )
 
     # 4. Load the data
-    dataset = resolve_training_dataset(data_file, tokenizer.eos_token, verbose=verbose)
+    dataset = resolve_training_dataset(data_path, tokenizer.eos_token, verbose=verbose)
     if n is not None:
         original_size = len(dataset)
         capped_size = min(n, original_size)
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         help="HuggingFace model name or path (default: unsloth/Qwen3-8B)",
     )
     parser.add_argument(
-        "--data-file",
+        "--data-path",
         type=str,
         default="imdb_reviews.txt",
         help=(
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     fine_tune(
         model_name=args.model_name,
-        data_file=args.data_file,
+        data_path=args.data_path,
         max_seq_length=args.max_seq_length,
         n=args.n,
         verbose=args.verbose,
