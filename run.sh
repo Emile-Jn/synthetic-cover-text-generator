@@ -24,8 +24,8 @@ echo "Finished."
 # sbatch run.sh hello_world.py
 # sbatch --partition=GPU-a100 run.sh -m src.vibe_check --prompt ""
 # sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file amanneo/enron-mail-corpus-mini --model-name unsloth/Qwen3.5-4B-Base
-# sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3.5-4B-Base
-# sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3.5-4B-Base --n 64
-# sbatch --partition=GPU-a100 run.sh -m src.train_lora --data-file stanfordnlp/imdb --model-name unsloth/Qwen3-4B-Base --n 64
+# sbatch --partition=GPU-a100 run.sh -m src.train_lora --model-name unsloth/Qwen3.5-4B-Base --data-path stanfordnlp/imdb
+# sbatch --partition=GPU-a100 run.sh -m src.train_lora --model-name unsloth/Qwen3.5-4B-Base --data-path stanfordnlp/imdb --max-samples 64
+# sbatch --partition=GPU-a100 run.sh -m src.train_lora --model-name unsloth/Qwen3-4B-Base --data-path stanfordnlp/imdb --max-samples 64
 
 # sbatch --partition=GPU-a100 run.sh -m src.generate_synthetic_cover_text --model-path 20260316_2119_dauntless-bee-13 --num-samples 10

@@ -4,8 +4,7 @@ training LLMs.
 """
 import os
 
-from datasets import Dataset, DatasetDict, concatenate_datasets, load_dataset
-from huggingface_hub import HfApi
+from datasets import Dataset, DatasetDict, load_dataset
 from pyprojroot import here
 from enum import Enum, auto
 
@@ -38,52 +37,39 @@ def load_text_lines(file_path, eos_token, n=None):
         a Hugging Face Dataset with a single "text" column containing the processed lines.
     """
     with open(file_path, "r", encoding="utf-8") as f:
-        if eos_token is not None:
-            # Inject the anchor tokens directly into the raw string
-            lines = [f"{eos_token}{clean_text(line)}{eos_token}" for line in f if line.strip()]
-        else:
-            lines = [clean_text(line) for line in f if line.strip()]
-        if n is not None:
-            lines = lines[:n]
+        lines = [clean_text(line) for line in f if line.strip()]
+
+    if n is not None:
+        lines = lines[:n]
+
+    lines = inject_eos(lines, eos_token)
     return Dataset.from_dict({"text": lines})
 
-
-def resolve_training_dataset(data_path: str,
-                             eos_token: str,
-                             max_samples: int = None,
-                             sort: SortOption = None,
-                             verbose: bool = False):
+def inject_eos(text_samples: list[str] | Dataset, eos_token: str | None):
     """
-    Resolve training data from local data/ first, then fallback to Hugging Face datasets.
-
+    Inject an EOS token at the start and end of each sample.
     Args:
-        data_path: Local filename under data/ or a HF dataset identifier.
-        eos_token: Token to inject at start and end of each example.
-        max_samples: Optional limit on the number of samples to take from the dataset.
-        sort: How to sort the dataset before taking n samples (ASC or DESC). If None, no sorting is applied.
-        verbose: Print verbose messages.
+        text_samples: Text samples as a list[str] or a Hugging Face Dataset.
+        eos_token: Token to inject at the start and end (if not None).
 
     Returns:
-        A Hugging Face Dataset with a single "text" column.
+        The same data shape with EOS tokens injected into each sample.
     """
-    local_path = here(f"data/{data_path}")
-    # If data_file is the name of a local file, load it directly as text lines.
-    if os.path.isfile(local_path):
-        print(f"Using local dataset file: {local_path}")
-        ds = load_text_lines(local_path, eos_token)
-    # Otherwise, try to load it as a Hugging Face dataset (with parquet fallback if needed).
-    else:
-        print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_path}")
-        loaded = load_dataset(data_path)
-        ds = resolve_split(loaded)
-        ds = subset(ds, n=max_samples, sort=sort)
+    if eos_token is None:
+        return text_samples
 
-    if verbose:
-        print("First 5 samples from resolved dataset:")
-        for i, sample in enumerate(ds["text"][:5], start=1):
-            print(f"{i}. {sample}")
+    if isinstance(text_samples, Dataset):
+        if "text" not in text_samples.column_names:
+            raise KeyError("Expected a 'text' column in the input Dataset.")
+        return text_samples.map(
+            lambda row: {"text": f"{eos_token}{clean_text(row['text'])}{eos_token}"}
+        )
 
-    return ds
+    if isinstance(text_samples, list):
+        return [f"{eos_token}{text}{eos_token}" for text in text_samples]
+
+    raise TypeError("text_samples must be a list[str] or datasets.Dataset")
+
 
 def resolve_split(ds: DatasetDict | Dataset):
     """
@@ -137,3 +123,41 @@ def subset(ds: Dataset, n: int = None, sort: SortOption = None):
                 ds = ds.remove_columns("_word_count")
 
     return ds.select(range(min(n, len(ds))))
+
+def resolve_training_dataset(data_path: str,
+                             eos_token: str,
+                             max_samples: int = None,
+                             sort: SortOption = None,
+                             verbose: bool = False):
+    """
+    Resolve training data from local data/ first, then fallback to Hugging Face datasets.
+
+    Args:
+        data_path: Local filename under data/ or a HF dataset identifier.
+        eos_token: Token to inject at start and end of each example.
+        max_samples: Optional limit on the number of samples to take from the dataset.
+        sort: How to sort the dataset before taking n samples (ASC or DESC). If None, no sorting is applied.
+        verbose: Print verbose messages.
+
+    Returns:
+        A Hugging Face Dataset with a single "text" column.
+    """
+    local_path = here(f"data/{data_path}")
+    # If data_file is the name of a local file, load it directly as text lines.
+    if os.path.isfile(local_path):
+        print(f"Using local dataset file: {local_path}")
+        ds = load_text_lines(local_path, eos_token)
+    # Otherwise, try to load it as a Hugging Face dataset (with parquet fallback if needed).
+    else:
+        print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_path}")
+        loaded = load_dataset(data_path)
+        ds = resolve_split(loaded)
+        ds = subset(ds, n=max_samples, sort=sort)
+        ds = inject_eos(ds, eos_token)
+
+    if verbose:
+        print("First 5 samples from resolved dataset:")
+        for i, sample in enumerate(ds["text"][:5], start=1):
+            print(f"{i}. {sample}")
+
+    return ds
