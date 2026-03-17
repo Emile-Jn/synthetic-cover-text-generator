@@ -1,0 +1,9 @@
+Running on: a-a100-q-6
+usage: train_lora.py [-h] [--model-name MODEL_NAME] [--data-path DATA_PATH]
+                     [--max-seq-length MAX_SEQ_LENGTH]
+                     [--max-samples MAX_SAMPLES] [--sort {asc,desc}]
+                     [--verbose]
+train_lora.py: error: argument --sort: invalid choice: 'ASC' (choose from asc, desc)
+🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.
+🦥 Unsloth Zoo will now patch everything to make training faster!
+Finished.

@@ -131,6 +131,8 @@ def generate_samples(
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 top_p=top_p,
+                repetition_penalty=1.1,
+                no_repeat_ngram_size=4,
                 pad_token_id=tokenizer.pad_token_id,
                 eos_token_id=tokenizer.eos_token_id,
                 use_cache=True,
