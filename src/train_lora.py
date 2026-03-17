@@ -21,7 +21,7 @@ import time
 from transformers import TrainerCallback
 from transformers.utils import logging
 
-from src.data_loading import resolve_training_dataset
+from src.data_loading import resolve_training_dataset, SortOption
 
 # Disable very verbose model loading
 logging.set_verbosity_error()
@@ -53,6 +53,8 @@ class SampleTimingCallback(TrainerCallback):
 def fine_tune(model_name: str = "unsloth/Qwen3-8B",
               data_path: str = "imdb_reviews.txt",
               max_seq_length: int = 512,
+              max_samples: int | None = None,
+              sort: SortOption | None = None,
               n: int | None = 10000,
               verbose: bool = False):
     """
@@ -61,6 +63,8 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
         model_name: the exact HuggingFace model name or path to use as the base for fine-tuning (default: "unsloth/Qwen3-8B").
         data_path: either the name of a local text file inside the data/ directory or a Hugging Face dataset identifier to load the training data from (default: "imdb_reviews.txt").
         max_seq_length: the maximum token sequence length to use when loading the model and preparing the dataset (default: 512).
+        max_samples: optional cap applied while resolving the dataset (default: None).
+        sort: optional dataset sort mode used with max_samples (SortOption.ASC or SortOption.DESC).
         n: only use the first n samples from the dataset for training. If None, use the entire dataset (default: 10000).
         verbose: whether to print additional information during dataset loading and preparation (default: False).
 
@@ -72,6 +76,8 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
 
     if n is not None and n < 1:
         raise ValueError("n must be >= 1 when provided")
+    if max_samples is not None and max_samples < 1:
+        raise ValueError("max_samples must be >= 1 when provided")
 
     # Initialize wandb
     run = wandb.init(
@@ -79,6 +85,8 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
         config={
             "model_name": model_name,
             "max_seq_length": max_seq_length,
+            "max_samples": max_samples,
+            "sort": sort.name if sort is not None else None,
             "n": n,
             "lora_r": 64,
             "lora_alpha": 64,
@@ -118,7 +126,11 @@ def fine_tune(model_name: str = "unsloth/Qwen3-8B",
     )
 
     # 4. Load the data
-    dataset = resolve_training_dataset(data_path, tokenizer.eos_token, verbose=verbose)
+    dataset = resolve_training_dataset(data_path,
+                                       tokenizer.eos_token,
+                                       max_samples = max_samples,
+                                       sort=sort,
+                                       verbose=verbose)
     if n is not None:
         original_size = len(dataset)
         capped_size = min(n, original_size)
@@ -190,6 +202,19 @@ if __name__ == "__main__":
         help="Maximum token sequence length (default: 512)",
     )
     parser.add_argument(
+        "--max-samples",
+        type=int,
+        default=None,
+        help="Optional cap applied while resolving the dataset (default: None).",
+    )
+    parser.add_argument(
+        "--sort",
+        type=str,
+        choices=["asc", "desc"],
+        default=None,
+        help="Optional sort mode to apply with --max-samples: asc or desc.",
+    )
+    parser.add_argument(
         "--n",
         type=int,
         default=10000,
@@ -201,10 +226,13 @@ if __name__ == "__main__":
         help="Whether to print additional information during dataset loading and preparation.",
     )
     args = parser.parse_args()
+    sort_option = SortOption[args.sort.upper()] if args.sort is not None else None
     fine_tune(
         model_name=args.model_name,
         data_path=args.data_path,
         max_seq_length=args.max_seq_length,
+        max_samples=args.max_samples,
+        sort=sort_option,
         n=args.n,
         verbose=args.verbose,
     )

@@ -8,7 +8,7 @@ import random
 from transformers import AutoTokenizer
 from datasets import load_dataset, Dataset, DatasetDict
 
-from src.data_loading import resolve_training_dataset, subset, SortOption
+from src.data_loading import resolve_training_dataset, subset, resolve_split, SortOption
 from src.check_sample_lengths import sample_length_analysis, pretty_print
 
 DEFAULT_MODEL_NAME = "unsloth/Qwen3-8B"
@@ -87,8 +87,9 @@ def main(dataset_name: str, n: int | None = None, sort: SortOption = None):
         nothing, prints stats about sample lengths.
     """
     ds = load_dataset(dataset_name) # load the dataset from HuggingFace
-    analysis_ds = subset(ds, n=n, sort=sort) # take a subset of n samples from the whole dataset
-    word_counts = count_words(analysis_ds) # Count the number of words in each sample
+    ds = resolve_split(ds) # Take the "unsupervised" or "train" split
+    ds = subset(ds, n=n, sort=sort) # take a subset of n samples from the whole dataset
+    word_counts = count_words(ds) # Count the number of words in each sample
     stats_dict = sample_length_analysis(word_counts) # Calculate representative statistics
     pretty_print(stats_dict) # Print the stats
 
