@@ -62,7 +62,7 @@ def inject_eos(text_samples: list[str] | Dataset, eos_token: str | None):
         if "text" not in text_samples.column_names:
             raise KeyError("Expected a 'text' column in the input Dataset.")
         return text_samples.map(
-            lambda row: {"text": f"{eos_token}{clean_text(row['text'])}{eos_token}"}
+            lambda row: {"text": f"{eos_token}{row['text']}{eos_token}"}
         )
 
     if isinstance(text_samples, list):
@@ -125,7 +125,7 @@ def subset(ds: Dataset, n: int = None, sort: SortOption = None):
     return ds.select(range(min(n, len(ds))))
 
 def resolve_training_dataset(data_path: str,
-                             eos_token: str,
+                             eos_token: str | None,
                              max_samples: int = None,
                              sort: SortOption = None,
                              verbose: bool = False):
@@ -150,10 +150,12 @@ def resolve_training_dataset(data_path: str,
     # Otherwise, try to load it as a Hugging Face dataset (with parquet fallback if needed).
     else:
         print(f"Local file not found at {local_path}. Trying Hugging Face dataset: {data_path}")
-        loaded = load_dataset(data_path)
-        ds = resolve_split(loaded)
-        ds = subset(ds, n=max_samples, sort=sort)
-        ds = inject_eos(ds, eos_token)
+        loaded = load_dataset(data_path) # Load the dataset from Hugging Face
+        ds = resolve_split(loaded) # Take the right split ("unsupervised" by default)
+        ds = subset(ds, n=max_samples, sort=sort) # Keep only a certain number of samples
+        ds = ds.map(lambda row: {"text": clean_text(row["text"])}) # Remove HTML artefacts
+        if eos_token is not None:
+            ds = inject_eos(ds, eos_token) # Inject the EOS token at the start and end of each sample for training
 
     if verbose:
         print("First 5 samples from resolved dataset:")
